@@ -42,8 +42,8 @@ gulp.task('sass', function() {
 
 gulp.task('scripts', ['clean', 'lint'], function() {
   return gulp.src(paths.scripts)
-             .pipe(ngAnnotate())
-             .pipe(ngTemplateCache())
+             // .pipe(ngAnnotate())
+             // .pipe(ngTemplateCache())
              .pipe(sourcemaps.init())
              .pipe(concat('all.js'))
              .pipe(uglify())

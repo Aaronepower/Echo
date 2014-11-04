@@ -1,97 +1,98 @@
 (function () {
-  'use strict';
-  function editorController ($scope, $element, socket, caret, file, HighlighterService) {
-    var vm = this
-    $scope.fileText = ''
+  var localStream
+    , localPeerConnection
+    , remotePeerConnection
 
-    vm.highlightEvent = function () {
-      caret.setStart(HighlighterService.highlight($scope.fileText, vm.file.keywords, true))
+  var localVideo  = document.getElementById('localVideo')
+    , remoteVideo = document.getElementById('remoteVideo')
+    , startButton = document.getElementById('startButton')
+    , callButton = document.getElementById('callButton')
+    , hangButton = document.getElementById('hangButton')
+
+  startButton.disabled = false
+  callButton.disabled = true
+  hangButton.disabled = false
+  startButton.onclick = start
+  callButton.onclick = call
+  hangButton.onclick = hangup
+
+
+  function gotStream(stream) {
+    trace("Received local stream")
+    localVideo.src = window.URL.createObjectURL(stream)
+    localStream = stream
+    callButton.disabled = false
+  }
+
+  function start () {
+    trace("Requesting local stream")
+    startButton.disabled = true
+    getUserMedia({video:true}, gotstream, function (error) {
+      trace("getuserMedia Error: "+error)
+    })
+  }
+
+  function call () {
+    callButton.disabled = true
+    hangButton.disabled = false
+    trace("starting call")
+
+    if (localStream.getVideoTracks().length > 0) {
+      trace("Using video device "+localStream.getVideoTracks()[0].label)
     }
 
-    $scope.$watch('fileText', function (newText) {
-      $('#editor').text(newText)
-    })
+    var servers = null
 
-    socket.on('backspace', function (index, endPoint) {
-      console.log('message')
-      $scope.fileText = caret.removeSel($scope.fileText, index, endPoint)
-      $('#editor').text($scope.fileText)
-      // vm.highlightEvent()
-    })
+    localPeerConnection = new RTCPeerConnection(servers)
+    trace("Created local peer connection object localPeerConnection")
+    localPeerConnection.onicecandidate = getLocalIceCandidate
+    
+    remotePeerConnection = new RTCPeerConnection(servers)
+    trace("Created local peer connection object remotePeerConnection")
+    remotePeerConnection.onicecandidate = getRemoteIceCandidate
+    remotePeerConnection.onaddstream = gotRemoteStream
 
-    socket.on('change', function (index, msg) {
-      console.log(index)
-      $scope.fileText = caret.insertText($scope.fileText, index, msg)
-      console.log($scope.fileText);
-      $('#editor').text($scope.fileText)
-      // vm.highlightEvent()
-    })
+    localPeerConnection.addStream(localStream)
+    trace("Added localStream to localPeerConnection")
+    localPeerConnection.createOffer(gotLocalDescription, handleError)
+  }
 
-    // socket.on('keyword', function (keyword) {
-    //   vm.file.keywords.push(keyword)
-    //   // if (vm.file.keywords.length === 29) {
-    //   //   HighlighterService.highlight($scope.fileText, vm.file.keywords)
-    //   // }
-    // })
+  function gotLocalDescription (description) {
+    localPeerConnection.setLocalDescription(description)
+    trace("Offer from localPeerConnection: \n"+ description.sdp)
+    remotePeerConnection.setRemoteDescription(description)
+    remotePeerConnection.createAnswer(gotRemoteDescription, handleError)
+  }
 
-    socket.on('file', function (doc) {
-      $scope.fileText =doc.contents
-      var regex = /(\n)/g
-      file.setLineNums((regex.test($scope.fileText) ? $scope.fileText.match(regex).length : 0))
-      $('#editor').text($scope.fileText)
-    })
+  function gotRemoteDescription (description) {
+    remotePeerConnection.setLocalDescription(description)
+    trace("Offer from remotePeerConnection: \n"+ description.sdp)
+    localPeerConnection.setRemoteDescription(description)
+  }
 
-    $element.bind('keypress', function (event) {
-      var inputCode = event.which
-      var character = String.fromCharCode(inputCode)
-      var index     = caret.getStart()
-      socket.emit('change', index, character)
-      // vm.highlightEvent()
-    })
+  function hangup () {
+    trace("Ending call")
+    localPeerConnection.close()
+    remotePeerConnection.close()
+    localPeerConnection = null
+    remotePeerConnection = null
+    hangButton.disabled = true
+    callButton.disabled = false
+  }
 
-    $element.bind('keydown', function (event) {
-      var inputCode = event.which
-      if (inputCode && inputCode < 0x30) {
-        var str        = $('#editor').text()
-        ,   index      = caret.getStart()
-        ,   startPoint = index - caret.getSelectionText().length
+  function gotRemoteStream (event) {
+    remoteVideo.src = window.URL.createObjectURL(event.stream)
+    trace("Received remote stream")
+  }
 
-        switch(inputCode) {
-          case 8: // Backspace
-          if (startPoint <= 0) {
-            socket.emit('backspace', index, index)
-            caret.removeSel($scope.fileText, index, index)
-          }
-          else {
-            socket.emit('backspace', startPoint, index)
-            caret.removeSel($scope.fileText, startPoint, index)
-          }
-          break;
-          case 9: // Tab
-          $('#editor').text(caret.insertText(str, index, '\t'))
-          socket.emit('change', index, '\t')
-          caret.setStart(index+1)
-          break;
-          case 13: //Return Carriage
-          index = caret.getStart()
-          console.log(index);
-          $('#editor').text(caret.insertText(str, index, '\n'))
-          socket.emit('change', index, '\n')
-          caret.setStart(index+1)
-          break;
-        }
-        // vm.highlightEvent()
-        if (inputCode === 9 || inputCode === 13) {
-          return false
-        }
-      }
-    })
-    // $element.bind('click', function (event) {
-    //   console.log(JSON.stringify());
-    // })
-}
+  function gotLocalIceCandidate (event) {
+    if (event.candidate) {
+      remotePeerConnection.RTCIceCandidate(event.candidate)
+      trace("got remote ICE candidate: \n"+ event.candidate.candidate)
+    }
+  }
 
-angular
-.module('EditorApp', ['SocketFactory','CaretService', 'HighlighterService', 'FileService'])
-.controller('EditorCtrl', editorController)
+  function handleError () {
+    
+  }
 })()

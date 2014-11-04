@@ -10,8 +10,8 @@ var routes = require('./routes/index')
   , users  = require('./routes/users')
 
 var app      = express()
-var mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost:27017')
+// var mongoose = require('mongoose')
+// mongoose.connect('mongodb://localhost:27017')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))

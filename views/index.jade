@@ -1,5 +1,17 @@
-extends layout
+doctype html
+html
+  head
+    //- link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    video#localVideo(autoplay)
+    video#remoteVideo(autoplay)
 
-block content
-  h1= title
-  p Welcome to #{title}
+    div
+      button#startButton start
+      button#callButton Call
+      button#hangButton Hang Up
+
+  script(src = "/node_modules/angular/angular.js")
+  script(src = "/Dependencies/adapter.js")
+  script(src = "/javascripts/all.js")
+  
