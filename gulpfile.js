@@ -7,10 +7,13 @@ var gulp            = require('gulp')
   , jshintStylish   = require('jshint-stylish')
   , ngTemplateCache = require('gulp-angular-templatecache')
   , nodemon         = require('gulp-nodemon')
+  , jade            = require('gulp-jade')
+  , inline          = require('gulp-inline-source')
   , del             = require('del')
 
 var paths = { scripts : 'views/js/*.js'
             , scss : 'views/js/*.scss'
+            , jade : 'views/*.jade'
             , clean : [ 'public/images/**'
                       , 'public/javascripts/**'
                       , 'public/stylesheets/**'
@@ -24,6 +27,19 @@ var jshintOptions = { asi : true
 
 gulp.task('clean', function(cb) {
   del(paths.clean, cb)
+})
+
+gulp.task('jade', function() {
+  return gulp.src(paths.jade)
+      .pipe(jade({locals : {}}))
+      .pipe(inline())
+      .pipe(gulp.dest('./views/'))
+})
+
+gulp.task('inline', function() {
+  return gulp.src('./public/html/index.html')
+      .pipe(inline())
+      .pipe(gulp.dest('.public/inline/'))
 })
 
 gulp.task('lint', function() {
