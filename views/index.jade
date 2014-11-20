@@ -3,15 +3,16 @@ html
   head
     //- link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    video#localVideo(autoplay)
-    video#remoteVideo(autoplay)
+    video#localVideo(autoplay width="400" height="400")
+    video#remoteVideo(autoplay width="400" height="400")
 
     div
-      button#startButton start
+      button#startButton Start
       button#callButton Call
       button#hangButton Hang Up
 
-  script(src = "/node_modules/angular/angular.js")
+  script(src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.1/angular.min.js")
+  script(src = "/socket.io/socket.io.js")
   script(src = "/Dependencies/adapter.js")
   script(src = "/javascripts/all.js")
   
