@@ -7,45 +7,44 @@ var gulp            = require('gulp')
   , jshintStylish   = require('jshint-stylish')
   , ngTemplateCache = require('gulp-angular-templatecache')
   , nodemon         = require('gulp-nodemon')
-  , jade            = require('gulp-jade')
-  , inline          = require('gulp-inline-source')
+  , gutil           = require('gulp-util')
   , del             = require('del')
+  , exec            = require('child_process').exec
 
 var paths = { scripts : 'views/js/*.js'
             , scss : 'views/js/*.scss'
-            , jade : 'views/*.jade'
-            , clean : [ 'public/images/**'
-                      , 'public/javascripts/**'
-                      , 'public/stylesheets/**'
+            , clean : [ 'public/images/*.*'
+                      , 'public/javascripts/*.*'
+                      , 'public/stylesheets/*.*'
                       , '!public/javascripts/angular.min.js'
                       ]
             }
 
 var jshintOptions = { asi : true
-                    , laxcomma : true 
+                    , laxcomma : true
+                    , bitwise : true
+                    , camelcase : true
+                    , eqeqeq : true
+                    , immed : true
+                    , latedef : "nofunc"
+                    , quotmark : true
+                    , undef : true
+                    , strict : true
+                    , maxlen : 80
+                    , browser : true
+                    , devel : true
+                    , predef : ["rtc"]
                     }
 
-gulp.task('clean', function(cb) {
+gulp.task('clean', function (cb) {
   del(paths.clean, cb)
-})
-
-gulp.task('jade', function() {
-  return gulp.src(paths.jade)
-      .pipe(jade({locals : {}}))
-      .pipe(inline())
-      .pipe(gulp.dest('./views/'))
-})
-
-gulp.task('inline', function() {
-  return gulp.src('./public/html/index.html')
-      .pipe(inline())
-      .pipe(gulp.dest('.public/inline/'))
 })
 
 gulp.task('lint', function() {
   return gulp.src(paths.scripts)
              .pipe(jshint(jshintOptions))
              .pipe(jshint.reporter(jshintStylish))
+             .pipe(jshint.reporter('fail'))
 })
 
 gulp.task('sass', function() {
@@ -56,19 +55,57 @@ gulp.task('sass', function() {
 						 .pipe('public/css')
 })
 
-gulp.task('scripts', ['clean', 'lint'], function() {
+gulp.task('scripts', ['lint'], function() {
   return gulp.src(paths.scripts)
+             // Uncomment once angular code is implimented
              // .pipe(ngAnnotate())
              // .pipe(ngTemplateCache())
              .pipe(sourcemaps.init())
-             .pipe(concat('all.js'))
+             .pipe(concat('intercom.js'))
              .pipe(uglify())
              .pipe(sourcemaps.write())
              .pipe(gulp.dest('public/javascripts'))
 })
 
 gulp.task('watch', function () {
-  gulp.watch(paths.scripts, ['lint','scripts'])
+  gulp.watch(paths.scripts, ['clean','scripts'])
 })
 
-gulp.task('default', ['lint','scripts', 'watch'])
+gulp.task('demon', function() {
+  nodemon({ script : './bin/www'
+          , ext : 'js'
+          , env : { 'NODE_ENV' : 'development'
+                  , 'port' : 80
+                  }
+          , ignore : [ './node_modules/**'
+                     , './gulpfile.js'
+                     , './TestDB/**'
+                     , './public/**'
+                     ]
+          })
+         .on('start', ['watch'])
+         .on('change', ['watch'])
+})
+
+gulp.task('mongo', function (cb) {
+  var mongoPath
+  switch (gutil.env.dev) {
+    case 'AM':
+    case 'J': {
+      mongoPath = 'C:/Program Files/MongoDB 2.6 Standard/bin/mongod.exe'
+    }
+    break;
+    case 'JM': {
+      mongoPath = 'C:/Program Files/MongoDB/bin/mongod.exe'
+    }
+    default: {
+      mongoPath = 'A:/mongoDB/bin/mongod.exe'
+    }
+  }
+  exec('start '+mongoPath+' --dbpath ./TestDB/'
+      , function (err, stdout, stderr) {
+          console.log(stdout)
+      })
+})
+
+gulp.task('default', ['clean','demon', 'mongo', 'scripts'])
