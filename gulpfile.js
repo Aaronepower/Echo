@@ -33,7 +33,7 @@ var jshintOptions = { asi : true
                     , maxlen : 80
                     , browser : true
                     , devel : true
-                    , predef : ["rtc"]
+                    , predef : ['rtc', 'numOfVideos']
                     }
 
 gulp.task('clean', function (cb) {
@@ -89,7 +89,6 @@ gulp.task('demon', function() {
 
 gulp.task('mongo', function (cb) {
   var mongoPath
-  console.log(gutil.env.dev);
   switch (gutil.env.dev) {
     case 'AM': {
       mongoPath = 'C:/Program Files/MongoDB 2.6 Standard/bin/mongod.exe'
@@ -104,7 +103,7 @@ gulp.task('mongo', function (cb) {
       mongoPath = 'A:/mongoDB/bin/mongod.exe'
     }
   }
-  exec('start \"'+mongoPath+' --dbpath ./TestDB/\"'
+  exec('start \"MongoDB\" \"'+mongoPath+'\" --dbpath ./TestDB/'
       , function (err, stdout, stderr) {
           console.log(stdout)
       })
