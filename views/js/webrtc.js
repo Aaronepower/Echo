@@ -1,6 +1,5 @@
 (function () {
   'use strict';
-  /** global rtc */
   rtc.connect('ws://localhost:8001');
 
   rtc.createStream({'video': true, 'audio':false}, function (stream){

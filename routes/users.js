@@ -25,4 +25,14 @@ router
 	})
 })
 
+router.route('/:user_id')
+
+.get(function (request, response) {
+	User.findById(req.params.user_id, function (error, user) {
+		if (error) 
+			res.send(err)
+
+		res.json(user)
+	})
+})
 module.exports = router
