@@ -7,8 +7,10 @@
     rtc.attachStream(stream, 'local');
   });
 
+  var numOfVideos = 0;
   rtc.on('add remote stream', function (stream){
     // show the remote video
-    rtc.attachStream(stream, 'remote');
+    numOfVideos++
+    rtc.attachStream(stream, 'video'+numOfVideos)
   })
 })()
