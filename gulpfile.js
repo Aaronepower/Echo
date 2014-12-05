@@ -83,8 +83,8 @@ gulp.task('demon', function() {
                      , './public/**'
                      ]
           })
-         .on('start', ['watch'])
-         .on('change', ['watch'])
+         .on('start', ['clean','scripts', 'lint'])
+         .on('change', ['clean','scripts', 'lint'])
 })
 
 gulp.task('mongo', function (cb) {

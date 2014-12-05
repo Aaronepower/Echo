@@ -3,6 +3,8 @@
   var roomNum = prompt('Enter room number')
   rtc.connect('ws://localhost:8001', roomNum)
 
+  console.log('Room number: ' + roomNum)
+
   rtc.createStream({'video': true, 'audio':false}, function (stream){
     // get local stream for manipulation
     rtc.attachStream(stream, 'local')
@@ -26,6 +28,7 @@
     newVideo.autoplay = true
     newVideo.width = width
     newVideo.height = height
+    newVideo.id = id
     document.getElementById('videoContainer').appendChild(newVideo)
   }
 })()
