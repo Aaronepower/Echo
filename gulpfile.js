@@ -8,6 +8,7 @@ var gulp            = require('gulp')
   , ngTemplateCache = require('gulp-angular-templatecache')
   , nodemon         = require('gulp-nodemon')
   , gutil           = require('gulp-util')
+  , scsslint        = require('gulp-scss-lint')
   , del             = require('del')
   , exec            = require('child_process').exec
 
@@ -53,6 +54,11 @@ gulp.task('sass', function() {
 						 .pipe(sass())
 						 .pipe(sourcemaps.write())
 						 .pipe('public/css')
+})
+
+gulp.task('scss-lint', function() {
+  return gulp.src(paths.scss)
+             .pipe(scsslint())
 })
 
 gulp.task('scripts', ['lint'], function() {
@@ -108,5 +114,7 @@ gulp.task('mongo', function (cb) {
           console.log(stdout)
       })
 })
+
+gulp.task('recompile', ['clean', 'scss-lint', 'js-lint', 'scss', 'scripts'])
 
 gulp.task('default', ['clean','demon', 'mongo', 'scripts'])

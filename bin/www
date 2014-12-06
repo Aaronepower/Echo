@@ -2,61 +2,25 @@
 var debug  = require('debug')('WebCalls')
 var app    = require('../app')
   , webrtc = require('webrtc.io').listen(8001)
+  , bunyan = require('bunyan')
 app.set('port', process.env.PORT || 8000)
+
+var logger = bunyan.createLogger({ name : "Intercom"
+																 , serializers : bunyan.stdSerializers
+																 })
 
 var server = app.listen(app.get('port'), function() {
 	debug('Express server listening on port ' + server.address().port)
 })
 
+var io   = require('socket.io')(server)
 
-/*var io = require('socket.io').listen(server)
-
+for (var socketId in io.nsps['/'].adapter.rooms['user']) {
+	    console.log(socketId);
+	}
 io.on('connection', function (socket) {
+	socket.on('logged-in', function (userID) {
 
-	function findClientsSocketByRoomId(roomId) {
-		var res  = []
-		  , room = io.sockets.adapter.rooms[roomId]
-		if (room) {
-			for (var id in room) {
-				res.push(io.sockets.adapter.nsp.connected[id])
-			}
-		}
-		return res
-	}
-
-	function log () {
-		var array = ['>>> Message from server: ']
-		
-		for (var i = 0; i < arguments.length; i++) {
-			array.push(arguments[i])
-		}
-
-		socket.emit('log', array)
-	}
-
-	socket.on('message', function (message) {
-		log('Got message: ', message)
-		socket.broadcast.emit('message', message)
-	})
-
-	socket.on('create or join', function (room) {
-		var numOfClients = findClientsSocketByRoomId(room).length
-
-		log('Room '+ room + ' has ' + numOfClients + ' client(s)')
-		log('Request to create or join room '+room)
-
-		if (numOfClients === 0) {
-			socket.join(room)
-			socket.emit('created', room)
-		} else if (numOfClients === 1) {
-			io.sockets.in(room).emit('join', room)
-			socket.join(room)
-			socket.emit('joined', room)
-		} else {
-			socket.emit('full', room)
-		}
-
-		socket.emit('emit(): client '+socket.id+ 'joined room'+ room)
-		socket.broadcast.emit('broadcast(): client '+socket.id+ ' joined room '+room)
-	})
-})*/
+		io.join(userID);
+	})	
+})
