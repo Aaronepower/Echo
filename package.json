@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "gulp | bunyan",
-    "AM": "gulp --dev AM | bunyan",
-    "JM": "gulp --dev JM | bunyan",
-    "J": "gulp --dev J | bunyan"
+    "start": "gulp ",
+    "AM": "gulp --dev AM ",
+    "JM": "gulp --dev JM ",
+    "J": "gulp --dev J "
   },
   "dependencies": {
     "body-parser": "~1.8.1",

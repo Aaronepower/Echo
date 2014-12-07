@@ -8,6 +8,7 @@ var gulp            = require('gulp')
   , ngTemplateCache = require('gulp-angular-templatecache')
   , nodemon         = require('gulp-nodemon')
   , gutil           = require('gulp-util')
+  , scss            = require('gulp-sass')
   , scsslint        = require('gulp-scss-lint')
   , del             = require('del')
   , exec            = require('child_process').exec
@@ -41,19 +42,19 @@ gulp.task('clean', function (cb) {
   del(paths.clean, cb)
 })
 
-gulp.task('lint', function() {
+gulp.task('js-lint', function() {
   return gulp.src(paths.scripts)
              .pipe(jshint(jshintOptions))
              .pipe(jshint.reporter(jshintStylish))
              .pipe(jshint.reporter('fail'))
 })
 
-gulp.task('sass', function() {
+gulp.task('scss', ['scss-lint'], function() {
 	return gulp.src(paths.scss)
 						 .pipe(sourcemaps.init())
-						 .pipe(sass())
+						 .pipe(scss())
 						 .pipe(sourcemaps.write())
-						 .pipe('public/css')
+						 .pipe(gulp.dest('public/css'))
 })
 
 gulp.task('scss-lint', function() {
@@ -61,7 +62,7 @@ gulp.task('scss-lint', function() {
              .pipe(scsslint())
 })
 
-gulp.task('scripts', ['lint'], function() {
+gulp.task('scripts', ['js-lint'], function() {
   return gulp.src(paths.scripts)
              // Uncomment once angular code is implimented
              // .pipe(ngAnnotate())
@@ -78,10 +79,12 @@ gulp.task('watch', function () {
 })
 
 gulp.task('demon', function() {
+  var debug = gutil.env.debug || ''
   nodemon({ script : './bin/www'
           , ext : 'js'
           , env : { 'NODE_ENV' : 'development'
                   , 'port' : 80
+                  , 'DEBUG' : 'WebCalls'
                   }
           , ignore : [ './node_modules/**'
                      , './gulpfile.js'
@@ -89,8 +92,8 @@ gulp.task('demon', function() {
                      , './public/**'
                      ]
           })
-         .on('start', ['clean','scripts', 'lint'])
-         .on('change', ['clean','scripts', 'lint'])
+         .on('start', ['recompile'])
+         .on('change', ['recompile'])
 })
 
 gulp.task('mongo', function (cb) {
@@ -115,6 +118,6 @@ gulp.task('mongo', function (cb) {
       })
 })
 
-gulp.task('recompile', ['clean', 'scss-lint', 'js-lint', 'scss', 'scripts'])
+gulp.task('recompile', ['clean', 'scss', 'scripts'])
 
-gulp.task('default', ['clean','demon', 'mongo', 'scripts'])
+gulp.task('default', ['demon', 'mongo'])
