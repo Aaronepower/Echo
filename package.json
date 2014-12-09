@@ -2,12 +2,6 @@
   "name": "WebCalls",
   "version": "0.0.0",
   "private": true,
-  "scripts": {
-    "start": "gulp ",
-    "AM": "gulp --dev AM ",
-    "JM": "gulp --dev JM ",
-    "J": "gulp --dev J "
-  },
   "dependencies": {
     "body-parser": "~1.8.1",
     "bunyan": "^1.2.3",
