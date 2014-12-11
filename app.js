@@ -5,10 +5,12 @@ var express      = require('express')
   , cookieParser = require('cookie-parser')
   , bodyParser   = require('body-parser')
   , compression  = require('compression')
+  , session      = require('express-session')
 
-var routes = require('./routes/index')
-  , users  = require('./routes/users')
-  , app = express()
+var routes   = require('./routes/index')
+  , users    = require('./routes/users')
+  , messages = require('./routes/messages')
+  , app      = express()
 
 var mongoose = require('mongoose')
 mongoose.connect('mongodb://localhost:27017')
@@ -23,11 +25,15 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
+app.use(session({ secret : 'This needs to be replaced before it this goes public'
+		, resave : true
+	     	, saveUninitialized : true
+		}))
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', routes)
 app.use('/users', users)
-
+app.use('/messages', messages)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found')

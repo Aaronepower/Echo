@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var debug  = require('debug')('WebCalls')
+var debug  = require('debug')('Intercom')
 var app    = require('../app')
   , webrtc = require('webrtc.io').listen(8001)
 app.set('port', process.env.PORT || 8000)

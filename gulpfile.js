@@ -84,7 +84,7 @@ gulp.task('demon', function() {
           , ext : 'js'
           , env : { 'NODE_ENV' : 'development'
                   , 'port' : 80
-                  , 'DEBUG' : 'WebCalls'
+                  , 'DEBUG' : debug 
                   }
           , ignore : [ './node_modules/**'
                      , './gulpfile.js'
