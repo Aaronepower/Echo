@@ -25,10 +25,6 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
-app.use(session({ secret : 'This needs to be replaced before it this goes public'
-		, resave : true
-	     	, saveUninitialized : true
-		}))
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', routes)

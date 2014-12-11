@@ -14,5 +14,11 @@ build/Release
 # Commenting this out is preferred by some people, see
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git-
 node_modules
+
+# Files built with Gulp use 'gulp <options>' instead
 public/javascripts
+# Bower Dependencies
 bower_components
+
+# SWP Files created by VIM
+*.swp
