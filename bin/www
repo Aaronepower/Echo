@@ -13,9 +13,14 @@ var io   = require('socket.io')(server)
 
 io.on('connection', function (socket) {
 	socket.on('logged-in', function (userID) {
-		if (userID === '') socket.emit('empty-user-id')
+		if (userID === '') 
+                  socket.emit('empty-user-id')
 
-		io.join(userID)
-	})	
+		socket.join(userID)
+	})
 
+        socket.on('refresh user', function (userID) {
+          io.to(userID).emit('refresh')
+        
+        })
 })
