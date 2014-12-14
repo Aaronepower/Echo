@@ -7,4 +7,4 @@ var MessageSchema = new Schema({ message : String
                                , time : Date
                                })
 
-module.exports = mongoose.Model('Message', MessageSchema)
+module.exports = mongoose.model('Message', MessageSchema)
