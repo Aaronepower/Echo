@@ -1,7 +1,10 @@
-var router  = require('express').Router()
-  , debug   = require('debug')('Intercom')
-  , User    = require('../bin/User')
-  , jwt     = require('jsonwebtoken')
+var router    = require('express').Router()
+  , debug     = require('debug')('Intercom')
+  , User      = require('../bin/User')
+  , jwt       = require('jsonwebtoken')
+  , jwtSecret = 'Super Secret'
+  , auth      = require('../routes/Auth')
+  
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -10,12 +13,8 @@ router.get('/', function(req, res) {
 
 router.post('/signin', function (req, res) {
   debug('/signin POST request:\n', req.body)
-  var query = { $or : [ email : req.body.email
-                      , username : req.body.username
-                      ] 
-              , password: req.body.password
-              }
-  User.findOne(, function(err, user) {
+
+  User.findOne({token : req.token}, function(err, user) {
     if (err) res.send(err)
 
     if (!user) {
@@ -50,7 +49,7 @@ router.post('/signup', function (req, res) {
         res.status(403).end()
       }
 
-      user.token = jwt.sign(user, jwt-secret)
+      user.token = jwt.sign(user, jwtSecret)
       debug('User Object Created:', user)
       user.save()
       res.send(user)
@@ -59,22 +58,22 @@ router.post('/signup', function (req, res) {
   })
 })
 
-router.post('/update', authorize, function (req, res) {
+router.post('/update', auth, function (req, res) {
   debug('/update POST request:\n', req.body)
   var user = req.user
 
-  user.email = req.body.new-email || user.email
+  user.email = req.body.email || user.email
   user.username = req.body.username || user.username
   user.password = req.body.password || user.password
   user.avatar = req.body.avatar || user.avatar
-  user.token = jwt.sign(user, jwt-secret)
+  user.token = jwt.sign(user, jwtSecret)
 
   debug('User after updates:\n', user)
   user.save()
   res.send(user)
 })
 
-router.post('/addfriend', authorize, function (req, res) {
+router.post('/addfriend', auth, function (req, res) {
   debug('/addfriend POST request:\n', req.body)
   var user = req.user
     , query = { $or:[ {email : req.body.email}
@@ -96,34 +95,36 @@ router.post('/addfriend', authorize, function (req, res) {
         friend.pendingList.push(user.__id.toString())
       }
       friend.save()
-      user.token = jwt.sign(user, jwt-secret)
+      user.token = jwt.sign(user, jwtSecret)
       user.save()
       res.send(user)
     }
   })
 })
 
-router.post('/accept', authorize, function(req, res) {
+router.post('/accept', auth, function(req, res) {
   debug('/accept POST request:\n', req.body)
   var user  = req.user
-    , index = user.pendingList.indexOf(req.body.friendId)
+    , friendId = req.body.friendId
+    , index = user.pendingList.indexOf(friendId)
 
   if ( index !== -1) {
     user.pendingList.splice(index, 1)
   }
   if (user.friendsList.indexOf(friendId) !== -1) {
-    user.friendsList.push(req.body.friendId)
+    user.friendsList.push(friendId)
   }
-  user.token = jwt.sign(user, jwt-secret)
+  user.token = jwt.sign(user, jwtSecret)
   user.save()
   res.send(user)
 })
 
-router.post('/removefriend', authorize, function (req, res) {
+router.post('/removefriend', auth, function (req, res) {
   debug('/removefriend POST request:\n', req.body)
   var user = req.user
-    , index = user.friendsList.indexOf(req.body.friendId)
-    , pendingIndex = user.pendingList.indexOf(req.body.friendId)
+    , friendId = req.body.friendId
+    , index = user.friendsList.indexOf(friendId)
+    , pendingIndex = user.pendingList.indexOf(friendId)
 
   if (index === -1) {
     if (pendingIndex !== -1) {
@@ -138,7 +139,7 @@ router.post('/removefriend', authorize, function (req, res) {
   }
   
 
-  User.findOne({_id : req.body.friendId}, function (err, friend) {
+  User.findOne({_id : friendId}, function (err, friend) {
     if (err)
       res.send(err)
 
@@ -152,32 +153,12 @@ router.post('/removefriend', authorize, function (req, res) {
   res.send(user)
 })
 
-router.get('/validate',authorize, function (req, res) {
+router.get('/validate',auth, function (req, res) {
   var user = req.user
-  user.token = jwt.sign(user, jwt-secret)
+  user.token = jwt.sign(user, jwtSecret)
+  user.save()
   res.send(user)
 })
 
-function authorize (req, res, next) {
-  var authHeader = req.headers['authorization']
-  if (typeof authHeader === "undefined"){
-    res.status(403).end()
-  }
-  else {
-    var authValue = authHeader.split(" ")
-      , token = authValue[1]
-    User.findOne({token : token}, function (err, user) {
-      if (err)
-        res.send(err)
-      if (!user) {
-        res.status(404).end()
-      }
-      else {
-        req.user = user
-        debug('User added to request:\n', req.user)
-        next()
-      }
-    })
-  }
-}
+
 module.exports = router

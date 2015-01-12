@@ -14,6 +14,10 @@ var gulp            = require('gulp')
   , exec            = require('child_process').exec
 
 var paths = { scripts : 'views/js/*.js'
+            , serverPaths : [ 'app.js'
+                              , 'bin/*.js'
+                              , 'routes/*.js'
+                              ]
             , scss : 'views/js/*.scss'
             , clean : [ 'public/images/*.*'
                       , 'public/javascripts/*.*'
@@ -22,39 +26,50 @@ var paths = { scripts : 'views/js/*.js'
                       ]
             }
 
-var jshintOptions = { asi : true
-                    , laxcomma : true
-                    , bitwise : true
-                    , camelcase : true
-                    , eqeqeq : true
-                    , immed : true
-                    , latedef : "nofunc"
-                    , quotmark : true
-                    , undef : true
-                    , strict : true
-                    , maxlen : 80
-                    , browser : true
-                    , devel : true
-                    , predef : ['rtc']
-                    }
+var jsConfig = { asi : true
+               , laxcomma : true
+               , laxbreak : true
+               , bitwise : true
+               , camelcase : true
+               , eqeqeq : true
+               , immed : true
+               , latedef : "nofunc"
+               , quotmark : true
+               , undef : true
+               , strict : true
+               , maxlen : 80
+               , browser : true
+               , devel : true
+               , predef : ['rtc']
+               }
 
 gulp.task('clean', function (cb) {
   del(paths.clean, cb)
 })
 
 gulp.task('js-lint', function() {
-  return gulp.src(paths.scripts)
-             .pipe(jshint(jshintOptions))
+  var scriptPath
+  if (gutil.env.server) {
+    scriptPath = paths.serverPaths
+    jsConfig.browser = false
+    jsConfig.node = true
+    jsConfig.strict = false
+  }
+  else {
+    scriptPath = paths.scripts
+  }
+  return gulp.src(scriptPath)
+             .pipe(jshint(jsConfig))
              .pipe(jshint.reporter(jshintStylish))
              .pipe(jshint.reporter('fail'))
 })
 
 gulp.task('scss', ['scss-lint'], function() {
 	return gulp.src(paths.scss)
-						 .pipe(sourcemaps.init())
-						 .pipe(scss())
-						 .pipe(sourcemaps.write())
-						 .pipe(gulp.dest('public/css'))
+                   .pipe(sourcemaps.init())
+                   .pipe(scss())
+                   .pipe(sourcemaps.write())
+                   .pipe(gulp.dest('public/css'))
 })
 
 gulp.task('scss-lint', function() {
@@ -78,7 +93,7 @@ gulp.task('watch', function () {
   gulp.watch(paths.scripts, ['clean','scripts'])
 })
 
-gulp.task('demon', function() {
+gulp.task('demon',['recompile'], function() {
   var debug = gutil.env.debug || ''
   nodemon({ script : './bin/www'
           , ext : 'js'
@@ -86,6 +101,7 @@ gulp.task('demon', function() {
                   , 'port' : 80
                   , 'DEBUG' : debug 
                   }
+          , nodeArgs : ['--use_strict']          
           , ignore : [ './node_modules/**'
                      , './gulpfile.js'
                      , './TestDB/**'
@@ -99,17 +115,13 @@ gulp.task('demon', function() {
 gulp.task('mongo', function (cb) {
   var mongoPath
   switch (gutil.env.dev) {
-    case 'AM': {
-      mongoPath = 'C:/Program Files/MongoDB 2.6 Standard/bin/mongod.exe'
-    }
-    break;
     case 'J':
     case 'JM': {
       mongoPath = 'C:/Program Files/MongoDB/bin/mongod.exe'
     }
     break;
     default: {
-      mongoPath = 'A:/mongoDB/bin/mongod.exe'
+      mongoPath = 'C:/Program Files/MongoDB 2.6 Standard/bin/mongod.exe'
     }
   }
   exec('start \"MongoDB\" \"'+mongoPath+'\" --dbpath ./TestDB/'
