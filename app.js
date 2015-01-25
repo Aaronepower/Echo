@@ -8,7 +8,9 @@ var express      = require('express')
 
 var routes   = require('./routes/index')
   , messages = require('./routes/messages')
+  , users    = require('./routes/users')
   , app      = express()
+  , apiPath = '/api/'
 
 var mongoose = require('mongoose')
 mongoose.connect('mongodb://localhost:27017')
@@ -32,8 +34,13 @@ app.use(function (req, res, next) {
                )
   next()
 })
+// route = localhost/
 app.use('/', routes)
-app.use('/messages', messages)
+// route = localhost/api/users/
+app.use(apiPath+'users/', users)
+// route = localhost/api/messages/
+app.use(apiPath+'messages/', messages)
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found')

@@ -1,7 +1,7 @@
-var express = require('express')
-  , router  = express.Router()
-  , debug   = require('debug')('Intercom')
-  , Message = require('../bin/Message')
+var router   = require('express').Router()
+  , debug     = require('debug')('Intercom')
+  , Message   = require('../bin/Message')
+  , authorize = require('../routes/Auth')
 
 router
 .get('/', authorize, function (req, res) {
