@@ -40,7 +40,7 @@ var jsConfig = { asi : true
                , maxlen : 80
                , browser : true
                , devel : true
-               , predef : ['rtc']
+               , predef : ['rtc', 'angular']
                }
 
 gulp.task('clean', function (cb) {
@@ -79,9 +79,8 @@ gulp.task('scss-lint', function() {
 
 gulp.task('scripts', ['js-lint'], function() {
   return gulp.src(paths.scripts)
-             // Uncomment once angular code is implimented
-             // .pipe(ngAnnotate())
-             // .pipe(ngTemplateCache())
+             .pipe(ngAnnotate())
+//             .pipe(ngTemplateCache())
              .pipe(sourcemaps.init())
              .pipe(concat('intercom.js'))
              .pipe(uglify())
@@ -93,7 +92,7 @@ gulp.task('watch', function () {
   gulp.watch(paths.scripts, ['clean','scripts'])
 })
 
-gulp.task('demon',['recompile'], function() {
+gulp.task('demon', function() {
   var debug = gutil.env.debug || ''
   nodemon({ script : './bin/www'
           , ext : 'js'
@@ -101,7 +100,6 @@ gulp.task('demon',['recompile'], function() {
                   , 'port' : 80
                   , 'DEBUG' : debug 
                   }
-          , nodeArgs : ['--use_strict']          
           , ignore : [ './node_modules/**'
                      , './gulpfile.js'
                      , './TestDB/**'
