@@ -5,10 +5,6 @@
 	.controller('FormController', function ($resource) {
 
 		this.submit = function (user) {
-			if (  user.email !== '' 
-				 && user.password !== '' 
-				 && user.password === user.confirm
-				 ) {
 
 				var User = $resource('/api/users/signup/')
 
@@ -16,7 +12,6 @@
 					console.log(newUser)
 				})
 
-			}
 		}
 	})	
 })()

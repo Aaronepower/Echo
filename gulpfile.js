@@ -111,17 +111,8 @@ gulp.task('demon', function() {
 })
 
 gulp.task('mongo', function (cb) {
-  var mongoPath
-  switch (gutil.env.dev) {
-    case 'J':
-    case 'JM': {
-      mongoPath = 'C:/Program Files/MongoDB/bin/mongod.exe'
-    }
-    break;
-    default: {
-      mongoPath = 'C:/Program Files/MongoDB 2.6 Standard/bin/mongod.exe'
-    }
-  }
+  var mongoPath = 'C:/Program Files/MongoDB 2.6 Standard/bin/mongod.exe'
+
   exec('start \"MongoDB\" \"'+mongoPath+'\" --dbpath ./TestDB/'
       , function (err, stdout, stderr) {
           console.log(stdout)

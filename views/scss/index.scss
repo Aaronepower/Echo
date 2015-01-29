@@ -1,6 +1,26 @@
-html {
-  box-sizing: border-box;
+html{
+	font-family: sans-serif;
 }
-*, *:before, *:after {
-  box-sizing: inherit;
+
+ul{
+	list-style: none;
+}
+
+li{
+	margin-top: 10px;
+}
+
+input{
+	border-style: solid;
+	border-width: 0px 0px 1px 0px;
+	border-color: black;
+	outline: 0;
+}
+
+input.ng-invalid.ng-dirty{
+	border-color: red;
+}
+
+span{
+	color: red;
 }
