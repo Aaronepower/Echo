@@ -9,7 +9,7 @@ var gulp            = require('gulp')
   , nodemon         = require('gulp-nodemon')
   , gutil           = require('gulp-util')
   , scss            = require('gulp-sass')
-  , scsslint        = require('gulp-scss-lint')
+  , minifyCSS       = require('gulp-minify-css')
   , del             = require('del')
   , exec            = require('child_process').exec
 
@@ -18,7 +18,7 @@ var paths = { scripts : 'views/js/*.js'
                               , 'bin/*.js'
                               , 'routes/*.js'
                               ]
-            , scss : 'views/js/*.scss'
+            , scss : 'views/scss/*.scss'
             , clean : [ 'public/images/*.*'
                       , 'public/javascripts/*.*'
                       , 'public/stylesheets/*.*'
@@ -64,17 +64,14 @@ gulp.task('js-lint', function() {
              .pipe(jshint.reporter('fail'))
 })
 
-gulp.task('scss', ['scss-lint'], function() {
+gulp.task('scss', function() {
 	return gulp.src(paths.scss)
                    .pipe(sourcemaps.init())
                    .pipe(scss())
+                   .pipe(concat('style.css'))
+                   .pipe(minifyCSS())
                    .pipe(sourcemaps.write())
-                   .pipe(gulp.dest('public/css'))
-})
-
-gulp.task('scss-lint', function() {
-  return gulp.src(paths.scss)
-             .pipe(scsslint())
+                   .pipe(gulp.dest('public/stylesheets'))
 })
 
 gulp.task('scripts', ['js-lint'], function() {

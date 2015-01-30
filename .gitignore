@@ -17,6 +17,7 @@ node_modules
 
 # Files built with Gulp use 'gulp <options>' instead
 public/javascripts
+public/stylesheets
 # Bower Dependencies
 bower_components
 
