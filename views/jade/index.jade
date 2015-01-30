@@ -1,0 +1,32 @@
+doctype html
+html(ng-app="Intercom")
+  head
+    link(rel='stylsheet', href='/bower_components/skeleton/css/normalize.css')
+    link(rel='stylsheet', href='/bower_components/skeleton/css/skeleton.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    //-form(ng-controller="FormController as form" name="form")
+      //-ul
+        //-li
+          //-input(name="email" type="email" placeholder="Email" ng-model="user.email" required)
+          //-span(ng-show="form.email.$dirty && form.email.$error.required") Required!
+          //-span(ng-show="form.email.$dirty && form.email.$error.email") Not a vaild email!
+        //-li
+          //-input(name="password" type="text" placeholder="Password" ng-model="user.password" ng-minlength="5" ng-maxlength="30" required)
+          //-span(ng-show="form.password.$dirty && form.password.$error.required") Required!
+          //-span(ng-show="form.password.$dirty && form.password.$error.minlength") Password too short!
+          //-span(ng-show="form.password.$dirty && form.password.$error.maxlength") Password too long!
+        //-li
+          //-input(name="confirm" type="text" placeholder="Confirm Password" ng-model="user.confirm" ng-minlength="5" ng-maxlength="30" required)
+          //-span(ng-show="form.confirm.$dirty && form.confirm.$error.required") Required!
+          //-span(ng-show="form.confirm.$dirty && form.confirm.$error.minlength") Password too short!
+          //-span(ng-show="form.confirm.$dirty && form.confirm.$error.maxlength") Password too long!
+        //-li    
+          //-button(ng-disabled="form.$invalid" ng-click="form.submit(user)") Register
+            
+    call-area
+  //-script(src = "/bower_components/angular/angular.min.js")
+  script(src = '//ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js')
+  script(src = '//ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular-resource.js')
+  script(src = "/Dependencies/webrtc.io.js")
+  script(src = "/javascripts/intercom.js")

@@ -18,10 +18,10 @@ router.get('/', authorize, function (req, res) {
     else {
       friends.forEach(function (friend) {
         var props = [ 'password'
-                    , 'friendsList'
-                    , 'pendingList'
-                    , 'token'
-                    ]
+          , 'friendsList'
+          , 'pendingList'
+          , 'token'
+        ]
 
         for (var i = 0; i < props.length; i++) {
           delete friend[prop[i]]
@@ -37,22 +37,7 @@ router.get('/', authorize, function (req, res) {
   })
 })
 
-router.post('/signin', function (req, res) {
-  debug('/signin POST request:\n', req.body)
-
-  User.findOne({token : req.token}, function(err, user) {
-    if (err) res.send(err)
-
-    if (!user) {
-      res.status(404).end()
-    }
-    else {
-      res.send(user)
-    }
-  })
-})
-
-router.post('/signup', function (req, res) {
+router.post('/', function (req, res) {
   debug('/signup POST request:\n', req.body)
 
   User.find({email: req.body.email}, function (err, users) {
@@ -70,21 +55,21 @@ router.post('/signup', function (req, res) {
       user.avatar = req.body.avatar || ''
 
       if (  (user.email === '' || user.password === '') 
-         && (user.password !== req.body.confirm)
+          && (user.password !== req.body.confirm)
          ) {
-        res.status(403).end()
-      }
+           res.status(403).end()
+         }
 
-      user.token = jwt.sign(user, jwtSecret)
-      debug('User Object Created:', user)
-      user.save()
-      res.send(user)
+         user.token = jwt.sign(user, jwtSecret)
+         debug('User Object Created:', user)
+         user.save()
+         res.send(user)
     }
-    
+
   })
 })
 
-router.post('/update', authorize, function (req, res) {
+router.put('/', authorize, function (req, res) {
   debug('/update POST request:\n', req.body)
   var user = req.user
 
@@ -99,33 +84,86 @@ router.post('/update', authorize, function (req, res) {
   res.send(user)
 })
 
-router.post('/addfriend', authorize, function (req, res) {
-  debug('/addfriend POST request:\n', req.body)
-  var user = req.user
-    , query = { $or:[ {email : req.body.email}
-                    , {username : req.body.username}
-                    ]
-              }
-
-  User.findOne(query, function (err, friend) {
-    if (err)
+router.delete('/', authorize, function (req, res) {
+  User.remove({_id : req.user._id}, function (err) {
+    if (err) {
       res.send(err)
-
-    if (!user) {
-      res.status(404).end()
     }
     else {
-      user.friendsList.push(friend._id.str)
 
-      if (friend.friendsList.indexOf(user._id.str) === -1)  {
-        friend.pendingList.push(user._id.str)
-      }
-      friend.save()
-      user.token = jwt.sign(user, jwtSecret)
-      user.save()
-      res.send(user)
+      User.find({_id : {$in : req.user.friendsList}}, function (err, friends) {
+        if (err) {
+          res.send(err)
+        }
+        else {
+          if (!friends.length) {
+            res.send(204).end()
+          }
+          else {
+            var id = req.user._id
+            friends.forEach(function (friend) {
+              var friendsListPosition = friend.friendsList.indexOf(id)
+              var pendingListPosition = friend.pendingList.indexOf(id)
+
+              if (~friendsListPosition) {
+                friend.friendsList.splice(friendsListPosition, 1)
+              }
+
+              if (~pendingListPosition) {
+                friend.pendingList.splice(pendingListPosition, 1)
+              }
+              friend.save()
+            })
+            res.status(204).end()
+          }
+        }
+      })
     }
+  }) 
+})
+
+router.post('/signin', function (req, res) {
+  debug('/signin POST request:\n', req.body)
+
+  User.findOne({email: req.body.email, password: req.body.password}, function(err, user) {
+    if (err) res.send(err)
+
+      if (!user) {
+        res.status(404).end()
+      }
+      else {
+        res.send(user)
+      }
   })
+})
+
+router.post('/add', authorize, function (req, res) {
+  debug('/add POST request:\n', req.body)
+  var user = req.user
+    , query = { $or:[ {email : req.body.email}
+    , {username : req.body.username}
+    ]
+    }
+
+    User.findOne(query, function (err, friend) {
+      if (err)
+        res.send(err)
+
+      if (!user) {
+        res.status(404).end()
+      }
+      else {
+        user.friendsList.push(friend._id.str)
+
+        if (friend.friendsList.indexOf(user._id.str) === -1)  {
+          friend.pendingList.push(user._id.str)
+        }
+        friend.save()
+        user.token = jwt.sign(user, jwtSecret)
+        user.save()
+        res.send(user)
+      }
+    })
 })
 
 router.post('/accept', authorize, function(req, res) {
@@ -145,8 +183,8 @@ router.post('/accept', authorize, function(req, res) {
   res.send(user)
 })
 
-router.post('/removefriend', authorize, function (req, res) {
-  debug('/removefriend POST request:\n', req.body)
+router.post('/remove', authorize, function (req, res) {
+  debug('/remove POST request:\n', req.body)
   var user = req.user
     , friendId = req.body.friendId
     , index = user.friendsList.indexOf(friendId)
@@ -163,7 +201,7 @@ router.post('/removefriend', authorize, function (req, res) {
   else {
     user.friendsList.splice(index, 1)
   }
-  
+
 
   User.findOne({_id : friendId}, function (err, friend) {
     if (err)

@@ -16,7 +16,7 @@ var mongoose = require('mongoose')
 mongoose.connect('mongodb://localhost:27017')
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'))
+app.set('views', path.join(__dirname, 'views/jade'))
 app.set('view engine', 'jade')
 app.use(compression())
 // uncomment after placing your favicon in /public

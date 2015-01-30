@@ -13,7 +13,9 @@ var gulp            = require('gulp')
   , del             = require('del')
   , exec            = require('child_process').exec
 
-var paths = { scripts : 'views/js/*.js'
+var paths = { scripts : ['views/js/formController.js'
+                        , 'views/js/*.js'
+                        ]
             , serverPaths : [ 'app.js'
                               , 'bin/*.js'
                               , 'routes/*.js'
@@ -29,7 +31,6 @@ var paths = { scripts : 'views/js/*.js'
 var jsConfig = { asi : true
                , laxcomma : true
                , laxbreak : true
-               , bitwise : true
                , camelcase : true
                , eqeqeq : true
                , immed : true
@@ -61,7 +62,7 @@ gulp.task('js-lint', function() {
   return gulp.src(scriptPath)
              .pipe(jshint(jsConfig))
              .pipe(jshint.reporter(jshintStylish))
-             .pipe(jshint.reporter('fail'))
+             //.pipe(jshint.reporter('fail'))
 })
 
 gulp.task('scss', function() {
