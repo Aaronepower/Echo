@@ -1,0 +1,13 @@
+form(name="loginForm")
+  ul
+    li
+      input(name="loginEmail" type="email" placeholder="Email" ng-model="user.loginEmail" required)
+      span(ng-show="loginForm.loginEmail.$dirty && loginForm.loginEmail.$error.required") Required!
+      span(ng-show="loginForm.loginEmail.$dirty && loginForm.loginEmail.$error.email") Not a vaild email!
+    li
+      input(name="loginPassword" type="password" placeholder="Password" ng-model="user.loginPassword" ng-minlenght="5" ng-maxlength="30" required)
+      span(ng-show="loginForm.loginPassword.$dirty && loginForm.loginPassword.$error.required") Required!
+      span(ng-show="loginForm.loginPassword.$dirty && loginForm.loginPassword.$error.minlength") Password too short!
+      span(ng-show="loginForm.loginPassword.$dirty && loginForm.loginPassword.$error.maxlength") Password too long!
+    li
+      button(ng-disabled="loginForm.$invalid") Login
