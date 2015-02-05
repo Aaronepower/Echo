@@ -5,10 +5,10 @@
 	Intercom.config(['$routeProvider', function ($routeProvider) {
 		$routeProvider.
 		when('/register', {
-			templateUrl: 'partials/register.jade'
+			templateUrl: 'partials/register'
 		}).
 		otherwise({ 
-			redirectTo: '/register' 
+			redirectTo: 'partials/register' 
 		})
 	}])
 })()

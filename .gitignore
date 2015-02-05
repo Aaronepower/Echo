@@ -20,6 +20,7 @@ public/javascripts
 public/stylesheets
 # Bower Dependencies
 bower_components
+.bowerrc
 
 # SWP Files created by VIM
 *.swp

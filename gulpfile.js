@@ -111,7 +111,7 @@ gulp.task('demon', function() {
 gulp.task('mongo', function (cb) {
   var mongoPath = 'C:/Program Files/MongoDB 2.6 Standard/bin/mongod.exe'
 
-  exec('start \"MongoDB\" \"'+mongoPath+'\" --dbpath ./TestDB/'
+  exec('start \"MongoDB\" \"'+mongoPath+'\" --dbpath ./TestDB/ --smallfiles'
       , function (err, stdout, stderr) {
           console.log(stdout)
       })
