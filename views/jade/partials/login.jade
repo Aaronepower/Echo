@@ -1,4 +1,4 @@
-form(name="loginForm")
+form(name="loginForm" ng-controller="LoginFormController as login")
   ul
     li
       input(name="loginEmail" type="email" placeholder="Email" ng-model="user.loginEmail" required)
@@ -10,4 +10,4 @@ form(name="loginForm")
       span(ng-show="loginForm.loginPassword.$dirty && loginForm.loginPassword.$error.minlength") Password too short!
       span(ng-show="loginForm.loginPassword.$dirty && loginForm.loginPassword.$error.maxlength") Password too long!
     li
-      button(ng-disabled="loginForm.$invalid") Login
+      input(type="button" ng-disabled="loginForm.$invalid" ng-click="login.submit(user)") Login

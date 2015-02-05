@@ -1,14 +1,14 @@
 (function () {
 	'use strict';
-	var Intercom = angular.module('Intercom', ['ngRoute'])
 
-	Intercom.config(['$routeProvider', function ($routeProvider) {
-		$routeProvider.
-		when('/register', {
-			templateUrl: 'partials/register'
-		}).
-		otherwise({ 
-			redirectTo: 'partials/register' 
-		})
-	}])
+	angular.module('Intercom', ['ngRoute', 'ngResource'])
+	// 	   .config(function ($routeProvider) {
+	// 		$routeProvider.
+	// 		when('/login', {
+	// 			templateUrl: 'partials/login'
+	// 		}).
+	// 		otherwise({ redirectTo: '/register'
+	// 			      , templateUrl: 'partials/register'
+	// 				  })
+	// })
 })()

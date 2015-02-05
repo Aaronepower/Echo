@@ -1,4 +1,4 @@
-form(ng-controller="registerFormController" name="registerForm")
+form(ng-controller="registerFormController as register" name="registerForm")
   ul
     li
       input(name="registerEmail" type="email" placeholder="Email" ng-model="user.registerEmail" required)
@@ -15,4 +15,4 @@ form(ng-controller="registerFormController" name="registerForm")
       span(ng-show="registerForm.registerConfirm.$dirty && registerForm.registerConfirm.$error.minlength") Password too short!
       span(ng-show="registerForm.registerConfirm.$dirty && registerForm.registerConfirm.$error.maxlength") Password too long!
     li
-      button(ng-disabled="registerForm.$invalid") Register
+      button(ng-disabled="registerForm.$invalid" ng-click="register.submit(user)") Register

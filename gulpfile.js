@@ -13,8 +13,8 @@ var gulp            = require('gulp')
   , del             = require('del')
   , exec            = require('child_process').exec
 
-var paths = { scripts : ['views/js/formController.js'
-                        , 'views/js/*.js'
+var paths = { scripts : ['views/js/partials.js'
+                        , 'views/js/**/*.js'
                         ]
             , serverPaths : [ 'app.js'
                               , 'bin/*.js'

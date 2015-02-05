@@ -12,9 +12,6 @@ var routes   = require('./routes/index')
   , app      = express()
   , apiPath = '/api/'
 
-var mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost:27017')
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views/jade'))
 app.set('view engine', 'jade')
