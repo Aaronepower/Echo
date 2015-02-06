@@ -12,6 +12,7 @@ var gulp            = require('gulp')
   , minifyCSS       = require('gulp-minify-css')
   , del             = require('del')
   , exec            = require('child_process').exec
+  , wrap            = require('gulp-wrap')
 
 var paths = { scripts : ['views/js/partials.js'
                         , 'views/js/**/*.js'
@@ -37,7 +38,6 @@ var jsConfig = { asi : true
                , latedef : "nofunc"
                , quotmark : true
                , undef : true
-               , strict : true
                , maxlen : 80
                , browser : true
                , devel : true
@@ -54,7 +54,6 @@ gulp.task('js-lint', function() {
     scriptPath = paths.serverPaths
     jsConfig.browser = false
     jsConfig.node = true
-    jsConfig.strict = false
   }
   else {
     scriptPath = paths.scripts
@@ -78,9 +77,9 @@ gulp.task('scss', function() {
 gulp.task('scripts', ['js-lint'], function() {
   return gulp.src(paths.scripts)
              .pipe(ngAnnotate())
-//             .pipe(ngTemplateCache())
              .pipe(sourcemaps.init())
              .pipe(concat('intercom.js'))
+             .pipe(wrap('(function (){\n "use strict";\n <%= contents %>\n})();'))
              .pipe(uglify())
              .pipe(sourcemaps.write())
              .pipe(gulp.dest('public/javascripts'))

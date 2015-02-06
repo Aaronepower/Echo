@@ -10,4 +10,4 @@ form(name="loginForm" ng-controller="LoginFormController as login")
       span(ng-show="loginForm.loginPassword.$dirty && loginForm.loginPassword.$error.minlength") Password too short!
       span(ng-show="loginForm.loginPassword.$dirty && loginForm.loginPassword.$error.maxlength") Password too long!
     li
-      input(type="button" ng-disabled="loginForm.$invalid" ng-click="login.submit(user)") Login
+      input(type="button" ng-disabled="loginForm.$invalid" ng-click="login.submit(user)" value="Login")

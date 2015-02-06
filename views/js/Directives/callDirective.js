@@ -1,9 +1,7 @@
-(function() {
-	'use strict';
-	angular.module('Intercom')
-		   .directive('callArea', function() {
-		   		return { restrict: 'E'
-		   			   , templateUrl: 'partials/call-area'
-		   		}
-		   })
-})()
+function callDirective () {
+  return { restrict: 'E'
+         , templateUrl: 'partials/call-area'
+         }
+}
+angular.module('Intercom')
+       .directive('callArea', callDirective)
