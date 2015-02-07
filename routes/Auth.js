@@ -9,6 +9,7 @@ module.exports = function (req, res, next) {
   else {
     var authValue = authHeader.split(' ')
       , token = authValue[1]
+
     User.findOne({token : token}, function (err, user) {
       if (err)
         res.send(err)

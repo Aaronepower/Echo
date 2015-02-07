@@ -7,32 +7,40 @@ var router    = require('express').Router()
 
 router.get('/', authorize, function (req, res) {
   var user = req.user
+    , friendsAndPending = user.friendsList.concat(user.pendingList)
 
-  User.find({_id : {$in : user.friendsList}}, function (err, friends) {
+  User.find({_id : {$in : friendsAndPending}}, function (err, friends) {
     if (err)
       res.send(err)
 
     if (!friends.length) {
-      res.send(404)
+      res.status(404).end()
     }
     else {
+      var modifiedFriends = []
       friends.forEach(function (friend) {
-        var props = [ 'password'
-          , 'friendsList'
-          , 'pendingList'
-          , 'token'
-        ]
+        friend = friend.toObject()
+        user.pendingList.forEach(function (pendingFriendId) {
+          if (friend._id.str === pendingFriendId.str) {
+            friend.pending = true
+          }
+        })
 
-        for (var i = 0; i < props.length; i++) {
-          delete friend[prop[i]]
-
-        }
+        delete friend.password
+        delete friend.friendsList
+        delete friend.pendingList
+        delete friend.token
+        delete friend.__v
 
         if (friend.username) {
           delete friend.email
         }
+        else {
+          delete friend.username
+        }
+        modifiedFriends.push(friend)
       })
-      res.send(friends)
+      res.send(modifiedFriends)
     }
   })
 })
@@ -45,7 +53,7 @@ router.post('/', function (req, res) {
       res.send(err)
 
     if (users.length) {
-      res.status(403).end()
+      res.status(406).end()
     }
     else {
       var user = new User()
@@ -70,7 +78,7 @@ router.post('/', function (req, res) {
 })
 
 router.put('/', authorize, function (req, res) {
-  debug('/update POST request:\n', req.body)
+  debug('/update PUT request:\n', req.body)
   var user = req.user
 
   user.email = req.body.email || user.email
@@ -90,8 +98,10 @@ router.delete('/', authorize, function (req, res) {
       res.send(err)
     }
     else {
+      var user              = req.user
+        , friendsAndPending = user.friendsList.concat(user.pendingList)
 
-      User.find({_id : {$in : req.user.friendsList}}, function (err, friends) {
+      User.find({_id : {$in : friendsAndPending}}, function (err, friends) {
         if (err) {
           res.send(err)
         }
@@ -100,7 +110,7 @@ router.delete('/', authorize, function (req, res) {
             res.send(204).end()
           }
           else {
-            var id = req.user._id
+            var id = user._id
             friends.forEach(function (friend) {
               var friendsListPosition = friend.friendsList.indexOf(id)
               var pendingListPosition = friend.pendingList.indexOf(id)
@@ -125,8 +135,14 @@ router.delete('/', authorize, function (req, res) {
 router.post('/signin', function (req, res) {
   debug('/signin POST request:\n', req.body)
 
-  User.findOne({email: req.body.email, password: req.body.password}, function(err, user) {
-    if (err) res.send(err)
+  var query = {email : req.body.email
+              , password : req.body.password
+              }
+  User.findOne(query, function(err, user) {
+    if (err) { 
+      res.send(err)
+    }
+    else {
 
       if (!user) {
         res.status(404).end()
@@ -134,36 +150,37 @@ router.post('/signin', function (req, res) {
       else {
         res.send(user)
       }
+    }
   })
 })
 
 router.post('/add', authorize, function (req, res) {
   debug('/add POST request:\n', req.body)
   var user = req.user
-    , query = { $or:[ {email : req.body.email}
-    , {username : req.body.username}
-    ]
+    , query = { $or : [ {email : req.body.email}
+                      , {username : req.body.username}
+                      ]
+              }
+    
+  User.findOne(query, function (err, friend) {
+    if (err)
+      res.send(err)
+
+    if (!friend) {
+      res.status(404).end()
     }
+    else {
+      user.friendsList.push(friend._id)
 
-    User.findOne(query, function (err, friend) {
-      if (err)
-        res.send(err)
-
-      if (!user) {
-        res.status(404).end()
+      if (friend.friendsList.indexOf(user._id) === -1)  {
+        friend.pendingList.push(user._id)
       }
-      else {
-        user.friendsList.push(friend._id.str)
-
-        if (friend.friendsList.indexOf(user._id.str) === -1)  {
-          friend.pendingList.push(user._id.str)
-        }
-        friend.save()
-        user.token = jwt.sign(user, jwtSecret)
-        user.save()
-        res.send(user)
-      }
-    })
+      friend.save()
+      user.token = jwt.sign(user, jwtSecret)
+      user.save()
+      res.send(user)
+    }
+  })
 })
 
 router.post('/accept', authorize, function(req, res) {
@@ -175,9 +192,11 @@ router.post('/accept', authorize, function(req, res) {
   if ( index !== -1) {
     user.pendingList.splice(index, 1)
   }
+
   if (user.friendsList.indexOf(friendId) !== -1) {
     user.friendsList.push(friendId)
   }
+
   user.token = jwt.sign(user, jwtSecret)
   user.save()
   res.send(user)
@@ -207,11 +226,12 @@ router.post('/remove', authorize, function (req, res) {
     if (err)
       res.send(err)
 
-    var friendIndex = friend.friendsList.indexOf(user._id.str)
+    var friendIndex = friend.friendsList.indexOf(user._id)
     friend.friendsList.splice(friendIndex, 1)
     debug('Friend saved:\n', friend)
     friend.save()
   })
+
   debug('User saved:\n', user)
   user.save()
   res.send(user)
