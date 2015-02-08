@@ -21,7 +21,7 @@ function APIService ($resource, TokenService) {
                                    , headers : authorization
                                    }         
 
-                        , validate : { method : 'POST'
+                        , validate : { method : 'GET'
                                      , url : usersRoute+'validate'
                                      , headers : authorization
                                      }
