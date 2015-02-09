@@ -1,11 +1,14 @@
-function LoginFormController ($resource) {
+function LoginFormController (API) {
   this.submit = function (user) {
-    var User = $resource('/api/users/signin')
 
-    User.save(user, function (newUser) {
-      console.log(newUser)
-      console.log(typeof newUser)
-    })
+    function success (response) {
+      console.log(response)
+    }
+
+    function error (response) {
+      console.log(response.status)
+    }
+    API.User.signin(user, success, error)
   }
 }
 angular.module('Intercom')

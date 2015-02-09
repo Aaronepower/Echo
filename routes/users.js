@@ -71,7 +71,8 @@ router.post('/', function (req, res) {
          user.token = jwt.sign(safeUser(user, true, true), jwtSecret)
          debug('User Object Created:', user)
          user.save()
-         res.send(safeUser(user))
+         var newUser = safeUser(user)
+         res.send(newUser)
     }
 
   })

@@ -1,4 +1,4 @@
-function TokenService (APIService) {
+function TokenService () {
   var tokenKey = 'Token'
   function getToken () {
     return window.localStorage.getItem(tokenKey)
@@ -12,15 +12,6 @@ function TokenService (APIService) {
     return getToken() !== null
   }
 
-  function isValidToken () {
-    if (tokenExists()) {
-      APIService.User.validate(function (response) {
-        if (response.status !== 404) {
-          setToken(response.token)
-        }
-      })
-    }
-  }
   return { getToken : getToken
          , setToken : setToken
          , tokenExists : tokenExists
