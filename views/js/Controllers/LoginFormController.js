@@ -1,7 +1,8 @@
-function LoginFormController (API) {
+function LoginFormController (API, $location) {
   this.submit = function (user) {
 
     function success (response) {
+    	$location.path('/dashboard')
       console.log(response)
     }
 

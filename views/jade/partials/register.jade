@@ -4,16 +4,16 @@ section(class="four columns" )
   form(ng-controller="RegisterFormController as register" name="registerForm")
     ul
       li
-        input(class="u-full-width" name="registerEmail" type="email" placeholder="Email" ng-model="user.registerEmail" required)
+        input(class="u-full-width" name="registerEmail" type="email" placeholder="Email" ng-model="user.email" required)
         span(ng-show="registerForm.registerEmail.$dirty && registerForm.registerEmail.$error.required") Required!
         span(ng-show="registerForm.registerEmail.$dirty && registerForm.registerEmail.$error.email") Not a vaild email!
       li
-        input(class="u-full-width" name="registerPassword" type="password" placeholder="Password" ng-model="user.registerPassword" ng-minlenght="5" ng-maxlength="30" required)
+        input(class="u-full-width" name="registerPassword" type="password" placeholder="Password" ng-model="user.password" ng-minlength="5" ng-maxlength="30" required)
         span(ng-show="registerForm.registerPassword.$dirty && registerForm.registerPassword.$error.required") Required!
         span(ng-show="registerForm.registerPassword.$dirty && registerForm.registerPassword.$error.minlength") Password too short!
         span(ng-show="registerForm.registerPassword.$dirty && registerForm.registerPassword.$error.maxlength") Password too long!
       li
-        input(class="u-full-width" name="registerConfirm" type="password" placeholder="Confirm Password" ng-model="user.registerConfirm" ng-minlength="5" ng-maxlength="30" required)
+        input(class="u-full-width" name="registerConfirm" type="password" placeholder="Confirm Password" ng-model="user.confirm" ng-minlength="5" ng-maxlength="30" required)
         span(ng-show="registerForm.registerConfirm.$dirty && registerForm.registerConfirm.$error.required") Required!
         span(ng-show="registerForm.registerConfirm.$dirty && registerForm.registerConfirm.$error.minlength") Password too short!
         span(ng-show="registerForm.registerConfirm.$dirty && registerForm.registerConfirm.$error.maxlength") Password too long!
