@@ -1,6 +1,8 @@
-angular.module('Intercom')
-.controller('CallController', function ($resource) {
+function CallController (UserService) {
   this.call = function() {
+    socket.emit('callOffer', UserService.getUserID()
+                           , UserService.getSelectedFriend())
+
     rtc.connect('ws://localhost:8001', 10)
 
     var options = {'video': true, 'audio':false}
@@ -33,4 +35,7 @@ angular.module('Intercom')
       .appendChild(newVideo)
     }
   }
-})
+}
+
+angular.module('Intercom')
+       .controller('CallController', CallController)
