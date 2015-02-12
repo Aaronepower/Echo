@@ -41,7 +41,7 @@ var jsConfig = { asi : true
                , maxlen : 80
                , browser : true
                , devel : true
-               , predef : ['rtc', 'angular']
+               , predef : ['rtc', 'angular', 'socket']
                }
 
 gulp.task('clean', function (cb) {

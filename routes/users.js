@@ -136,8 +136,10 @@ router.delete('/', authorize, function (req, res) {
 router.post('/signin', function (req, res) {
   debug('/signin POST request:\n', req.body)
 
-  var query = {email : req.body.email
-              , password : req.body.password
+  var query = { $or : [ {email : req.body.email}
+                      , {username : req.body.username}
+                      ] 
+                    , password : req.body.password                    
               }
   User.findOne(query, function(err, user) {
     if (err) { 

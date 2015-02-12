@@ -1,5 +1,4 @@
-angular.module('Intercom', ['ngRoute', 'ngResource'])
-.config(function ($routeProvider) {
+function IntercomConfig ($routeProvider) {
 	$routeProvider.
 	when('/login', {
 		templateUrl: 'partials/login'
@@ -10,4 +9,7 @@ angular.module('Intercom', ['ngRoute', 'ngResource'])
 	otherwise({ redirectTo: '/register'
 		, templateUrl: 'partials/register'
 	})
-})
+}
+
+angular.module('Intercom', ['ngRoute', 'ngResource'])
+.config(IntercomConfig)
