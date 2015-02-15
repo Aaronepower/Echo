@@ -1,3 +1,4 @@
+var socket = io();
 function IntercomConfig ($routeProvider) {
 	$routeProvider.
 	when('/login', {

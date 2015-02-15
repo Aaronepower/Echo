@@ -4,7 +4,7 @@ function RegisterFormController ($location, API, UserService, TokenService) {
 		function success (response) {
 			$location.path('/dashboard')
 			var user = { email : response.email
-                       , id : response.id
+                       , id : response._id
                        , avatar : response.avatar
 			           }
 			UserService.setUser(user)

@@ -1,3 +1,7 @@
 section(class="twelve columns" ng-controller="DashboardController as Dash")
-	h1 Dashboard
-	h2 Hi, {{Dash.email}}
+  h1 Dashboard
+  h2 Hi, {{Dash.email}}
+  video#local(width="400" height="400")
+  section(class="remotes")
+  section(class = "twelve columns" ng-controller="CallController as call")
+    button(ng-click="call.call()" ) Call

@@ -16,18 +16,22 @@ var io = require('socket.io')(server)
 
 io.on('connection', function (socket) {
   socket.on('logged-in', function (userID) {
+    console.log('User logged in: '+ userID)
     socket.join(userID)
   })
 
   socket.on('callOffer', function (senderID, receiverID) {
+    console.log('Call Offer sent from: '+senderID+' to: '+receiverID)
     socket.broadcast.to(receiverID).emit('callOffer', senderID)
   })
 
   socket.on('callAccepted', function (senderID, receiverID) {
+    console.log('Call Accepted to: '+senderID+' from: '+receiverID)
     socket.broadcast.to(senderID).emit('callAccepted', receiverID)
   })
 
   socket.on('callRejected', function (senderID, receiverID) {
+    console.log('Call Rejected to: '+senderID+' from: '+receiverID)
     socket.broadcast.to(senderID).emit('callRejected', receiverID)
   })
 })

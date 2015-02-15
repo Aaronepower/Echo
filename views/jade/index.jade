@@ -1,13 +1,14 @@
 doctype html
-html(ng-app="Intercom")
+html(ng-app='Intercom')
   head
     link(rel='stylesheet', href='/bower_components/skeleton/css/normalize.css')
     link(rel='stylesheet', href='/bower_components/skeleton/css/skeleton.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    div(class="container" ng-view)         
-  script(src = "/bower_components/angular/angular.min.js")
-  script(src = "/bower_components/angular-resource/angular-resource.min.js")
-  script(src = "/bower_components/angular-route/angular-route.min.js")
-  script(src = "/Dependencies/webrtc.io.js")
-  script(src = "/javascripts/intercom.js")
+    div(class='container' ng-view)         
+  script(src = '/bower_components/angular/angular.min.js')
+  script(src = '/bower_components/angular-resource/angular-resource.min.js')
+  script(src = '/bower_components/angular-route/angular-route.min.js')
+  script(src = '/socket.io/socket.io.js')
+  script(src = '/Dependencies/webrtc.io.js')
+  script(src = '/javascripts/intercom.js')

@@ -4,11 +4,12 @@ function LoginFormController ($location, API, UserService, TokenService) {
     function success (response) {
     	$location.path('/dashboard')
       var user = { email : response.email
-                 , id : response.id
+                 , _id : response._id
                  , avatar : response.avatar
                  }
       UserService.setUser(user)
       TokenService.setToken(response.token)
+      socket.emit('logged-in', user._id)
     }
 
     function error (response) {
