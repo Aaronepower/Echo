@@ -3,7 +3,7 @@ function CallService (UserService) {
 
     rtc.connect('ws://localhost:8001', ID)
 
-    var options = {'video': false, 'audio' : true}
+    var options = {'video': true, 'audio' : true}
 
     rtc.createStream(options, function (stream) {
       // get local stream for manipulation
