@@ -14,7 +14,7 @@ var gulp            = require('gulp')
   , exec            = require('child_process').exec
   , wrap            = require('gulp-wrap')
 
-var paths = { scripts : ['views/js/partials.js'
+var paths = { scripts : [ 'views/js/RouteProvider.js'
                         , 'views/js/**/*.js'
                         ]
             , serverPaths : [ 'app.js'
