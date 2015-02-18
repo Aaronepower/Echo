@@ -68,11 +68,10 @@ router.post('/', function (req, res) {
            res.status(403).end()
          }
 
-         user.token = jwt.sign(safeUser(user, true, true), jwtSecret)
+         user.token = jwt.sign(safeUser(user, true), jwtSecret)
          debug('User Object Created:', user)
          user.save()
-         var newUser = safeUser(user)
-         res.send(newUser)
+         res.send({token : user.token})
     }
 
   })
@@ -86,11 +85,11 @@ router.put('/', authorize, function (req, res) {
   user.username = req.body.username || user.username
   user.password = req.body.password || user.password
   user.avatar = req.body.avatar || user.avatar
-  user.token = jwt.sign(safeUser(user, true, true), jwtSecret)
+  user.token = jwt.sign(safeUser(user, true), jwtSecret)
 
   debug('User after updates:\n', user)
   user.save()
-  res.send(safeUser(user))
+  res.send({token : user.token})
 })
 
 router.delete('/', authorize, function (req, res) {
@@ -151,7 +150,7 @@ router.post('/signin', function (req, res) {
         res.status(404).end()
       }
       else {
-        res.send(safeUser(user))
+        res.send({token : user.token})
       }
     }
   })
@@ -182,9 +181,9 @@ router.post('/add', authorize, function (req, res) {
         friend.pendingList.push(user._id)
       }
       friend.save()
-      user.token = jwt.sign(safeUser(user, true, true), jwtSecret)
+      user.token = jwt.sign(safeUser(user, true), jwtSecret)
       user.save()
-      res.send(safeUser(user))
+      res.send({token : user.token})
     }
   })
 })
@@ -203,9 +202,9 @@ router.post('/accept', authorize, function(req, res) {
     }
   }
 
-  user.token = jwt.sign(safeUser(user, true, true), jwtSecret)
+  user.token = jwt.sign(safeUser(user, true), jwtSecret)
   user.save()
-  res.send(safeUser(user))
+  res.send({token : user.token})
 })
 
 router.post('/remove', authorize, function (req, res) {
@@ -247,27 +246,21 @@ router.post('/remove', authorize, function (req, res) {
 
   debug('User saved:\n', user)
   user.save()
-  res.send(safeUser(user))
+  res.send({token : user.token})
 })
 
 router.get('/validate',authorize, function (req, res) {
   var user = req.user
-  user.token = jwt.sign(safeUser(user, true, true), jwtSecret)
+  user.token = jwt.sign(safeUser(user, true), jwtSecret)
   user.save()
-  res.send(safeUser(user))
+  res.send({token : user.token})
 })
 
-function safeUser(user, deleteId, deleteToken) {
+function safeUser(user, deleteToken) {
   var newUser = user.toObject()
 
   delete newUser.password
   delete newUser.__v
-  delete newUser.pendingList
-  delete newUser.friendsList
-
-  if (deleteId) {
-    delete newUser._id
-  }
 
   if (deleteToken) {
     delete newUser.token

@@ -2,12 +2,8 @@ function LoginFormController ($location, API, UserService, TokenService) {
   this.submit = function (user) {
 
     function success (response) {
-      var user = { email : response.email
-                 , _id : response._id
-                 , avatar : response.avatar
-                 , token : response.token
-                 }
-      UserService.setUser(user)
+      console.log(response)
+      UserService.createUser(response.token)
       TokenService.setToken(response.token)
       $location.path('/dashboard')
       socket.emit('logged-in', user._id)

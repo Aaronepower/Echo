@@ -1,9 +1,8 @@
-function UserService () {
+function UserService (jwtHelper) {
   var user
     , friendID = '54d7b3f23469f2a448306960'
-  function setUser(newUser) {
-    console.log(newUser)
-    user = newUser
+  function createUser(token) {
+    user = jwtHelper.decodeToken(token)
   }
 
   function getUser() {
@@ -22,7 +21,7 @@ function UserService () {
     return friendID
   }
 
-  return { setUser : setUser
+  return { createUser : createUser
          , getUser : getUser
          , getUserID : getUserID
          , setFriend : setFriend
