@@ -10,6 +10,7 @@ module.exports = function (req, res, next) {
     var authValue = authHeader.split(' ')
       , token = authValue[1]
 
+    debug('Token: ', token)
     User.findOne({token : token}, function (err, user) {
       if (err)
         res.send(err)

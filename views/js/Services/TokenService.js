@@ -1,21 +1,26 @@
-function TokenService () {
+function TokenService ($window) {
   var tokenKey = 'Token'
   function getToken () {
-    return window.localStorage.getItem(tokenKey)
+    console.log($window.localStorage.getItem(tokenKey))
+    return $window.localStorage.getItem(tokenKey)
   }
 
   function setToken (token) {
-    window.localStorage.setItem(tokenKey, token)
+    $window.localStorage.setItem(tokenKey, token)
+    tokenService.token = getToken()
   }
 
   function tokenExists () {
     return getToken() !== null
   }
 
-  return { getToken : getToken
-         , setToken : setToken
-         , tokenExists : tokenExists
-         }
+  var tokenService = { getToken : getToken
+                     , setToken : setToken
+                     , tokenExists : tokenExists
+                     , token : getToken()
+                     }
+
+  return tokenService
 }
 
 angular.module('Intercom')

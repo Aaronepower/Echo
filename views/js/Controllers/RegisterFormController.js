@@ -8,7 +8,6 @@ function RegisterFormController ($location, API, UserService, TokenService) {
                        , avatar : response.avatar
 			           }
 			UserService.setUser(user)
-			TokenService.setToken(response.token)
 		}
 
 		function error (response) {

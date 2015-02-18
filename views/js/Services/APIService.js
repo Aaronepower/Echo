@@ -1,11 +1,16 @@
-function APIService ($resource, TokenService) {
+function APIService ($http, $resource, TokenService) {
+
   var usersRoute = '/api/users/'
-  var authorization = {'Authorization': 'Bearer '+TokenService.getToken()}
+    , authorization = {'Authorization': 'Bearer '+TokenService.token}
+
   var User = $resource( usersRoute
                       , {} 
                       , { signin : { method : 'POST'
                                    , url : usersRoute+'signin'
                                    }
+
+                        , update : { method : 'PUT'
+                                   }        
 
                         , add : { method: 'POST'
                                 , url : usersRoute+'add'
