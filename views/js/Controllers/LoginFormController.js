@@ -6,7 +6,7 @@ function LoginFormController ($location, API, UserService, TokenService) {
       UserService.createUser(response.token)
       TokenService.setToken(response.token)
       $location.path('/dashboard')
-      socket.emit('logged-in', user._id)
+      socket.emit('logged-in', UserService.getUserID())
     }
 
     function error (response) {

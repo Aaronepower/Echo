@@ -21,6 +21,7 @@
     "gulp": "^3.8.8",
     "gulp-angular-templatecache": "^1.4.2",
     "gulp-concat": "^2.4.1",
+    "gulp-imagemin": "^2.2.0",
     "gulp-inline-source": "^1.1.0",
     "gulp-jade": "^0.9.0",
     "gulp-jshint": "^1.8.5",

@@ -16,11 +16,12 @@ build/Release
 node_modules
 
 # Files built with Gulp use 'gulp <options>' instead
-public/javascripts
-public/stylesheets
+public
 # Bower Dependencies
 bower_components
 .bowerrc
+
+
 
 # SWP Files created by VIM
 *.swp

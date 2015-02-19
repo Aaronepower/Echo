@@ -1,6 +1,6 @@
 function UserService (jwtHelper) {
   var user
-    , friendID = '54d7b3f23469f2a448306960'
+    , friendID = '54e482b72325e9f81397d1de'
   function createUser(token) {
     user = jwtHelper.decodeToken(token)
   }

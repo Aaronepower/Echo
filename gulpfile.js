@@ -10,6 +10,7 @@ var gulp            = require('gulp')
   , gutil           = require('gulp-util')
   , scss            = require('gulp-sass')
   , minifyCSS       = require('gulp-minify-css')
+  , imagemin        = require('gulp-imagemin')
   , del             = require('del')
   , exec            = require('child_process').exec
   , wrap            = require('gulp-wrap')
@@ -86,8 +87,10 @@ gulp.task('scripts', ['js-lint'], function() {
              .pipe(gulp.dest('public/javascripts'))
 })
 
-gulp.task('watch', function () {
-  gulp.watch(paths.scripts, ['clean','scripts'])
+gulp.task('imagemin', function () {
+  return gulp.src('views/img/*.*')
+             .pipe(imagemin())
+             .pipe(gulp.dest('public/img'))
 })
 
 gulp.task('demon', function() {
@@ -117,6 +120,6 @@ gulp.task('mongo', function (cb) {
       })
 })
 
-gulp.task('recompile', ['clean', 'scss', 'scripts'])
+gulp.task('recompile', ['clean', 'scss', 'scripts', 'imagemin'])
 
 gulp.task('default', ['demon', 'mongo'])

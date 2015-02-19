@@ -1,7 +1,16 @@
-section(class="twelve columns" ng-controller="DashboardController as Dash")
+section(class="twelve columns" ng-controller="DashboardController as dash")
   h1 Dashboard
-  h2 Hi, {{Dash.email}}
-  video#local(width="400" height="400")
-  section(class="remotes")
+  h2 Hi, {{dash.email}}
+  div#local
+  div#remotes
+  div#messages(contenteditable)
   section(class = "twelve columns" ng-controller="CallController as call")
     button(ng-click="call.call()" ) Call
+  table
+    tbody
+      tr(ng-repeat="friend in dash.friends")
+       td 
+          img(ng-src="{{friend.avatar === '' ? 'public/images/profile.png' : friend.avatar}}")
+       td {{friend.username ? friend.username : friend.email}}
+       td
+         button(ng-click="dash.setFriend(friend._id)")

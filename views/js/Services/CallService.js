@@ -1,36 +1,45 @@
 function CallService (UserService) {
   function startCall(ID) {
+    // Set RTC options.
+    var rtcOpts = {
+        room: ID,
+        signaller: 'localhost:8997'
+      };
+    // call RTC module
+    var rtc = RTC(rtcOpts);
+    // A div element to show our local video stream
+    var localVideo = document.getElementById('local');
+    // A div element to show our remote video streams
+    var remoteVideo = document.getElementById('remotes');
+    // A contenteditable element to show our messages
+    var messageWindow = document.getElementById('messages');
 
-    rtc.connect('ws://localhost:8001', ID)
+    // Bind to events happening on the data channel
+    function bindDataChannelEvents(id, channel, attributes, connection) {
 
-    var options = {'video': true, 'audio' : true}
+      // Receive message
+      channel.onmessage = function (evt) {
+        messageWindow.innerHTML = evt.data;
+      };
 
-    rtc.createStream(options, function (stream) {
-      // get local stream for manipulation
-      rtc.attachStream(stream, 'local')
-    })
-
-    var numOfVideos = 0
-    rtc.on('add remote stream', function (stream){
-      // show the remote video
-      numOfVideos++
-
-        var newVideoId = 'videoNum'+numOfVideos
-      createVideo(newVideoId)
-      rtc.attachStream(stream, newVideoId)
-    })
-
-    function createVideo (id) {
-      var newVideo = document.createElement('video')
-        , width    = 400
-        , height   = 400
-
-      newVideo.autoplay = true
-      newVideo.width = width
-      newVideo.height = height
-      newVideo.id = id
-      angular.element(document.getElementById('remotes')).append(newVideo)
+      // Send message
+      messageWindow.onkeyup = function () {
+        channel.send(this.innerHTML);
+      };
     }
+
+    // Start working with the established session
+    function init(session) {
+      session.createDataChannel('chat');
+      session.on('channel:opened:chat', bindDataChannelEvents);
+    }
+
+    // Display local and remote video streams
+    localVideo.appendChild(rtc.local);
+    remoteVideo.appendChild(rtc.remote);
+
+    // Detect when RTC has established a session
+    rtc.on('ready', init);
   }
 
   function sendOffer() {

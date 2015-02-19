@@ -253,6 +253,7 @@ router.get('/validate',authorize, function (req, res) {
   var user = req.user
   user.token = jwt.sign(safeUser(user, true), jwtSecret)
   user.save()
+  debug('Token Sent: ', user.token)
   res.send({token : user.token})
 })
 
