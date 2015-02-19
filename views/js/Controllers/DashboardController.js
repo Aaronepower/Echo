@@ -1,11 +1,16 @@
 function DashboardController (UserService, API) {
-	this.email = UserService.getUser().email
-	var vm = this
-	API.User.query(function (response) {
-		vm.friends = response.friends
-	})
+  var loaded = false
+    , vm = this
+  document.addEventListener('userCreated', function (event) {
+    vm.email = event.detail.email
+  })
 
-	this.setFriend = UserService.setFriend
+  API.User.query(function (response) {
+    console.log(response)
+    vm.friends = [response]
+  })
+
+  this.setFriend = UserService.setFriend
 }
 angular.module('Intercom')
-       .controller('DashboardController', DashboardController)
+.controller('DashboardController', DashboardController)

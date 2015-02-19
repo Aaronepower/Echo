@@ -1,23 +1,23 @@
 section(class="four columns" )
   h2 Register
 
-  form(ng-controller="RegisterFormController as register" name="registerForm")
+  form(ng-controller="FormController as form")
     ul
       li
         input(class="u-full-width" name="registerEmail" type="email" placeholder="Email" ng-model="user.email" required)
-        span(ng-show="registerForm.registerEmail.$dirty && registerForm.registerEmail.$error.required") Required!
-        span(ng-show="registerForm.registerEmail.$dirty && registerForm.registerEmail.$error.email") Not a vaild email!
+        span(ng-show="form.registerEmail.$dirty && form.registerEmail.$error.required") Required!
+        span(ng-show="form.registerEmail.$dirty && form.registerEmail.$error.email") Not a vaild email!
       li
         input(class="u-full-width" name="registerPassword" type="password" placeholder="Password" ng-model="user.password" ng-minlength="5" ng-maxlength="30" required)
-        span(ng-show="registerForm.registerPassword.$dirty && registerForm.registerPassword.$error.required") Required!
-        span(ng-show="registerForm.registerPassword.$dirty && registerForm.registerPassword.$error.minlength") Password too short!
-        span(ng-show="registerForm.registerPassword.$dirty && registerForm.registerPassword.$error.maxlength") Password too long!
+        span(ng-show="form.registerPassword.$dirty && form.registerPassword.$error.required") Required!
+        span(ng-show="form.registerPassword.$dirty && form.registerPassword.$error.minlength") Password too short!
+        span(ng-show="form.registerPassword.$dirty && form.registerPassword.$error.maxlength") Password too long!
       li
         input(class="u-full-width" name="registerConfirm" type="password" placeholder="Confirm Password" ng-model="user.confirm" ng-minlength="5" ng-maxlength="30" required)
-        span(ng-show="registerForm.registerConfirm.$dirty && registerForm.registerConfirm.$error.required") Required!
-        span(ng-show="registerForm.registerConfirm.$dirty && registerForm.registerConfirm.$error.minlength") Password too short!
-        span(ng-show="registerForm.registerConfirm.$dirty && registerForm.registerConfirm.$error.maxlength") Password too long!
+        span(ng-show="form.registerConfirm.$dirty && form.registerConfirm.$error.required") Required!
+        span(ng-show="form.registerConfirm.$dirty && form.registerConfirm.$error.minlength") Password too short!
+        span(ng-show="form.registerConfirm.$dirty && form.registerConfirm.$error.maxlength") Password too long!
       li
-        input(type="button" class="button-primary" value="Register" ng-disabled="registerForm.$invalid" ng-click="register.submit(user)")
+        input(type="button" class="button-primary" value="Register" ng-disabled="form.$invalid" ng-click="form.submit(user)")
 
   a(href="#/login") Already registered? Login here!

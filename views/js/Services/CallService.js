@@ -3,7 +3,7 @@ function CallService (UserService) {
     // Set RTC options.
     var rtcOpts = {
         room: ID,
-        signaller: 'localhost:8997'
+        signaller: 'https://switchboard.rtc.io'
       };
     // call RTC module
     var rtc = RTC(rtcOpts);

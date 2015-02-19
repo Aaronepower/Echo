@@ -19,14 +19,13 @@ var paths = { scripts : [ 'views/js/RouteProvider.js'
                         , 'views/js/**/*.js'
                         ]
             , serverPaths : [ 'app.js'
-                              , 'bin/*.js'
-                              , 'routes/*.js'
-                              ]
+                            , 'bin/*.*'
+                            , 'routes/*.js'
+                            ]
             , scss : 'views/scss/*.scss'
-            , clean : [ 'public/images/*.*'
+            , clean : [ 'public/img/*.*'
                       , 'public/javascripts/*.*'
                       , 'public/stylesheets/*.*'
-                      , '!public/javascripts/angular.min.js'
                       ]
             }
 
@@ -43,7 +42,7 @@ var jsConfig = { asi : true
                , browser : true
                , devel : true
                , globals : { socket : true }
-               , predef : ['rtc', 'angular', 'io']
+               , predef : ['RTC', 'angular', 'io']
                }
 
 gulp.task('clean', function (cb) {

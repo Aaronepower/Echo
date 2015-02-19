@@ -35,9 +35,7 @@ router.get('/', authorize, function (req, res) {
         if (friend.username) {
           delete friend.email
         }
-        else {
-          delete friend.username
-        }
+
         modifiedFriends.push(friend)
       })
       res.send(modifiedFriends)
@@ -251,8 +249,6 @@ router.post('/remove', authorize, function (req, res) {
 
 router.get('/validate',authorize, function (req, res) {
   var user = req.user
-  user.token = jwt.sign(safeUser(user, true), jwtSecret)
-  user.save()
   debug('Token Sent: ', user.token)
   res.send({token : user.token})
 })

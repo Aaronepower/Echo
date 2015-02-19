@@ -1,16 +1,16 @@
 section(class="four columns")
   h2 Login
 
-  form(name="loginForm" ng-controller="LoginFormController as login")
+  form(ng-controller="FormController as form")
     ul
       li
         input(class="u-full-width" name="loginEmail" type="email" placeholder="Email" ng-model="user.email" value = "" required)
-        span(ng-show="loginForm.loginEmail.$dirty && loginForm.loginEmail.$error.required") Required!
-        span(ng-show="loginForm.loginEmail.$dirty && loginForm.loginEmail.$error.email") Not a vaild email!
+        span(ng-show="form.loginEmail.$dirty && form.loginEmail.$error.required") Required!
+        span(ng-show="form.loginEmail.$dirty && form.loginEmail.$error.email") Not a vaild email!
       li
         input(class="u-full-width" name="loginPassword" type="password" placeholder="Password" ng-model="user.password" ng-minlenght="5" ng-maxlength="30" value="" required)
-        span(ng-show="loginForm.loginPassword.$dirty && loginForm.loginPassword.$error.required") Required!
-        span(ng-show="loginForm.loginPassword.$dirty && loginForm.loginPassword.$error.minlength") Password too short!
-        span(ng-show="loginForm.loginPassword.$dirty && loginForm.loginPassword.$error.maxlength") Password too long!
+        span(ng-show="form.loginPassword.$dirty && form.loginPassword.$error.required") Required!
+        span(ng-show="form.loginPassword.$dirty && form.loginPassword.$error.minlength") Password too short!
+        span(ng-show="form.loginPassword.$dirty && form.loginPassword.$error.maxlength") Password too long!
       li
-        input(type="button" class="button-primary" ng-disabled="loginForm.$invalid" ng-click="login.submit(user)" value="Login")
+        input(type="button" class="button-primary" ng-disabled="form.$invalid" ng-click="form.submit(user)" value="Login")
