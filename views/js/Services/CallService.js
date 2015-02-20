@@ -1,44 +1,18 @@
 function CallService (UserService) {
   function startCall(ID) {
-    // Set RTC options.
-    var rtcOpts = {
-      room: ID,
-      signaller: 'http://localhost:3000'
-    };
-    // call RTC module
-    var rtc = RTC(rtcOpts);
-    // A div element to show our local video stream
-    var localVideo = document.getElementById('local');
-    // A div element to show our remote video streams
-    var remoteVideo = document.getElementById('remotes');
-    // A contenteditable element to show our messages
-    var messageWindow = document.getElementById('messages');
+    var webrtc = new SimpleWebRTC({
+      // the id/element dom element that will hold "our" video
+      localVideoEl: 'local',
+      // the id/element dom element that will hold remote videos
+      remoteVideosEl: 'remotes',
+      // immediately ask for camera access
+      autoRequestMedia: true
+    })
 
-    // Bind to events happening on the data channel
-    function bindDataChannelEvents(id, channel, attributes, connection) {
-
-      // Receive message
-      channel.onmessage = function (evt) {
-        messageWindow.innerHTML = evt.data;
-      };
-
-      // Send message
-      messageWindow.onkeyup = function () {
-        channel.send(this.innerHTML);
-      };
-    }
-
-    // Start working with the established session
-    function init(session) {
-      session.createDataChannel('chat');
-      session.on('channel:opened:chat', bindDataChannelEvents);
-      localVideo.appendChild(rtc.local);
-      remoteVideo.appendChild(rtc.remote);
-    }
-
-    // Display local and remote video streams
-    // Detect when RTC has established a session
-    rtc.on('ready', init);
+    webrtc.on('readyToCall', function () {
+      // you can name it anything
+      webrtc.joinRoom(ID)
+    })
   }
 
   function sendOffer() {
