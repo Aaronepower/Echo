@@ -2,9 +2,9 @@ function CallService (UserService) {
   function startCall(ID) {
     // Set RTC options.
     var rtcOpts = {
-        room: ID,
-        signaller: 'https://switchboard.rtc.io'
-      };
+      room: ID,
+      signaller: 'http://localhost:3000'
+    };
     // call RTC module
     var rtc = RTC(rtcOpts);
     // A div element to show our local video stream
@@ -32,12 +32,11 @@ function CallService (UserService) {
     function init(session) {
       session.createDataChannel('chat');
       session.on('channel:opened:chat', bindDataChannelEvents);
+      localVideo.appendChild(rtc.local);
+      remoteVideo.appendChild(rtc.remote);
     }
 
     // Display local and remote video streams
-    localVideo.appendChild(rtc.local);
-    remoteVideo.appendChild(rtc.remote);
-
     // Detect when RTC has established a session
     rtc.on('ready', init);
   }
@@ -66,8 +65,8 @@ function CallService (UserService) {
   })
 
   return { sendOffer : sendOffer
-         }
+  }
 }
 
 angular.module('Intercom')
-       .factory('CallService', CallService)
+.factory('CallService', CallService)

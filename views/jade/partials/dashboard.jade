@@ -2,10 +2,10 @@ section(class="twelve columns" ng-controller="DashboardController as dash")
   h1 Dashboard
   h2 Hi, {{dash.email}}
   div#local
-    div#remotes
-      div#messages(contenteditable)
-        section(class = "twelve columns" ng-controller="CallController as call")
-          button(ng-click="call.call()" ) Call
+  div#remotes
+  div#messages(contenteditable)
+  section(class = "twelve columns" ng-controller="CallController as call")
+    button(ng-click="call.call()" ) Call
   table
     tbody(quick-ng-repeat="friend in dash.friends track by $id(friend)")
       tr    
