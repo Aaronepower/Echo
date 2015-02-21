@@ -7,7 +7,7 @@ function DashboardController (UserService, API, CallService) {
 
   API.User.query(function (response) {
     console.log(response)
-    vm.friends = [response]
+    vm.friends = response
   })
 
   this.call = CallService.sendOffer

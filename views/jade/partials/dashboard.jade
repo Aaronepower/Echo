@@ -7,7 +7,6 @@ section.twelve.columns(ng-controller="DashboardController as dash")
       table.u-full-width
         thead
         tbody
-          //- TODO Only one User is showing up 
           tr(quick-ng-repeat="friend in dash.friends track by $id(friend) | filter: query")   
             td
               //- TODO Resize the image
