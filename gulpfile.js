@@ -42,7 +42,7 @@ var jsConfig = { asi : true
                , browser : true
                , devel : true
                , globals : { socket : true }
-               , predef : ['RTC', 'angular', 'io']
+               , predef : ['SimpleWebRTC', 'angular', 'io']
                }
 
 gulp.task('clean', function (cb) {

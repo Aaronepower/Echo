@@ -1,10 +1,10 @@
-section(class="four columns")
+section(class="three columns")
   h2 Login
 
   form(ng-controller="FormController as form")
     ul
       li
-        input(class="u-full-width" name="loginEmail" type="email" placeholder="Email" ng-model="user.email" value = "" required)
+        input(class="u-full-width" name="loginEmail" type="email" placeholder="Email" ng-model="user.email" value = "" required autofocus)
         span(ng-show="form.loginEmail.$dirty && form.loginEmail.$error.required") Required!
         span(ng-show="form.loginEmail.$dirty && form.loginEmail.$error.email") Not a vaild email!
       li
@@ -13,4 +13,6 @@ section(class="four columns")
         span(ng-show="form.loginPassword.$dirty && form.loginPassword.$error.minlength") Password too short!
         span(ng-show="form.loginPassword.$dirty && form.loginPassword.$error.maxlength") Password too long!
       li
-        input(type="button" class="button-primary" ng-disabled="form.$invalid" ng-click="form.submit(user)" value="Login")
+        input(type="submit" class="button-primary" ng-disabled="form.$invalid" ng-click="form.submit(user)" value="Login")
+        a(href="#/register") Register here!
+
