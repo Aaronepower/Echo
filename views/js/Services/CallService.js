@@ -3,16 +3,12 @@ function CallService (UserService) {
 
   function startCall(ID) {
     webrtc = new SimpleWebRTC({
-      // the id/element dom element that will hold "our" video
       localVideoEl: 'local',
-      // the id/element dom element that will hold remote videos
       remoteVideosEl: 'remotes',
-      // immediately ask for camera access
       autoRequestMedia: true
     })
 
     webrtc.on('readyToCall', function () {
-      // you can name it anything
       webrtc.joinRoom(ID)
     })
   }
@@ -31,12 +27,14 @@ function CallService (UserService) {
     })
 
     socket.on('callRejected', function (receiverID) {
-      
+      // TODO Replace in the UI
+      alert('User is busy,')
     })
   }
 
   socket.on('callOffer', function (senderID) {
     console.log('Call Offered from: '+senderID)
+    // TODO Replace within the UI
     var callConfirm = confirm(senderID+' is calling you. Accept?')
 
     if (callConfirm) {

@@ -1,16 +1,21 @@
 section(class="twelve columns" ng-controller="DashboardController as dash")
   h1 Dashboard
   h2 Hi, {{dash.email}}
+  //- TODO add an ng-show to only show when someone is calling or in a call
   video#local(width="400" height="400")
+  //- TODO After a call ends destroy all elements in a container
   div#remotes
   section(class = "twelve columns" ng-controller="CallController as call")
     button(ng-click="call.call()" ) Call
     button(ng-click="call.stop()") End Call
-  table
-    tbody(quick-ng-repeat="friend in dash.friends track by $id(friend)")
-      tr    
-        td
-          img(ng-src="{{friend.avatar ? friend.avatar : '/img/profile.png'}}")
-        td {{friend.username ? friend.username : friend.email}}
-        td
-          button(ng-click="dash.setFriend(friend._id)") Call
+    table
+      //- TODO Only one User is showing up 
+      tbody(quick-ng-repeat="friend in dash.friends track by $id(friend)")
+        tr    
+          td
+            //- TODO Resize the image
+            img(ng-src="{{friend.avatar ? friend.avatar : '/img/profile.png'}}")
+          //- TODO This logic doesn't work
+          td {{friend.username ? friend.username : friend.email}}
+          td
+            button(ng-click="dash.setFriend(friend._id); call.call()") Call

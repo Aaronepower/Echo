@@ -23,9 +23,7 @@ function IntercomRun ($rootScope, $location, API, TokenService, UserService) {
       if (next.access.tokenRequired) {
         if (TokenService.tokenExists()) {
           API.User.validate(function (response) {
-            UserService.createUser(response.token)
-            TokenService.setToken(response.token)
-            socket.emit('logged-in', UserService.getUserID())
+            UserService.loginEvent(response.token)
           }, function (response) {
             $location.path('/')
           })

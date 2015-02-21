@@ -8,11 +8,11 @@ function UserService ($location, jwtHelper, TokenService) {
     document.dispatchEvent(event)
   }
 
-  function getUser() {
+  function getUser () {
     return user
   }
 
-  function getUserID() {
+  function getUserID () {
     return user._id
   }
 
@@ -24,13 +24,14 @@ function UserService ($location, jwtHelper, TokenService) {
     return friendID
   }
 
+  function loginEvent (token) {
+    createUser(token)
+    TokenService.setToken(token)
+    socket.emit('logged-in', getUserID())
+}
   function loginSuccess(response) {
-      console.log(response)
-      var token = response.token
-      createUser(token)
-      TokenService.setToken(token)
-      $location.path('/dashboard')
-      socket.emit('logged-in', getUserID())
+    loginEvent(response.token)
+    $location.path('/dashboard')
   }
 
   function loginError (response) {
@@ -40,6 +41,7 @@ function UserService ($location, jwtHelper, TokenService) {
   return { createUser : createUser
          , loginSuccess : loginSuccess
          , loginError : loginError
+         , loginEvent : loginEvent
          , getUser : getUser
          , getUserID : getUserID
          , setFriend : setFriend
