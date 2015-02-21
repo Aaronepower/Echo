@@ -5,6 +5,39 @@ var router    = require('express').Router()
   , jwtSecret = 'Super Secret'
   , authorize = require('../routes/Auth')
 
+/**
+ * @api {get} /api/users/ Request the users' friend's.
+ * @apiName GetUsersFriends
+ * @apiGroup User
+ * 
+ * @apiHeader {String} Token Access key.
+ *
+ * @apiSuccess {Object[]} List of friends.
+ * 
+ * @apiSuccessExample {json[]} Success Response:
+ *  HTTP/1.1 200 OK
+ *  [
+ *    {
+ *    "_id": "54c9050cbd7420e0074fb90c",
+ *    "avatar": "smileyface.png",
+ *    "username": "",
+ *    "email": "johndoe@email.net"
+ *    },
+ *    {
+ *    "_id": "54e35727a8d330d81d001ab8",
+ *    "avatar": "",
+ *    "username": "Jane Doe",
+ *    },
+ *    {
+ *    "_id": "54e479e31ac5c5702aa797d2",
+ *    "avatar": "",
+ *    "username": "",
+ *    "email": "johnsmith@test.com"
+ *    }
+ *  ]
+ *
+ * @apiUse  Auth
+ */
 router.get('/', authorize, function (req, res) {
   var user = req.user
     , friendsAndPending = user.friendsList.concat(user.pendingList)
@@ -14,7 +47,7 @@ router.get('/', authorize, function (req, res) {
       res.send(err)
 
     if (!friends.length) {
-      res.status(404).end()
+      res.send([])
     }
     else {
       var modifiedFriends = []
@@ -258,6 +291,8 @@ function safeUser(user, deleteToken) {
 
   delete newUser.password
   delete newUser.__v
+  delete newUser.friendsList
+  delete newUser.pendingList
 
   if (deleteToken) {
     delete newUser.token

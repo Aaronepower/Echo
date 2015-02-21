@@ -1,5 +1,16 @@
 var User  = require('../bin/User')
   , debug = require('debug')('Intercom')
+/**
+ * @apiDefine Auth
+ *  Middleware to prevent unauthorized requests without a token.
+ *
+ * @apiError 403 No Token was placed into the request
+ * @apiError 404 No User was Found with that token
+ * @apiErrorExample 404 Response:
+ *    HTTP/1.1 404 Not Found
+ * @apiErrorExample 403 Response:
+ *   HTTP/1.1 403 Forbidden
+ */
 
 module.exports = function (req, res, next) {
   var authHeader = req.get('authorization')

@@ -1,4 +1,4 @@
-function DashboardController (UserService, API) {
+function DashboardController (UserService, API, CallService) {
   var loaded = false
     , vm = this
   document.addEventListener('userCreated', function (event) {
@@ -10,6 +10,11 @@ function DashboardController (UserService, API) {
     vm.friends = [response]
   })
 
+  this.call = CallService.sendOffer
+  this.stop = function () {
+    CallService.stop()
+    // TODO Added the hide video logic here
+  }
   this.setFriend = UserService.setFriend
 }
 angular.module('Intercom')
