@@ -1,6 +1,8 @@
 function CallService (UserService) {
+  var webrtc 
+
   function startCall(ID) {
-    var webrtc = new SimpleWebRTC({
+    webrtc = new SimpleWebRTC({
       // the id/element dom element that will hold "our" video
       localVideoEl: 'local',
       // the id/element dom element that will hold remote videos
@@ -15,6 +17,10 @@ function CallService (UserService) {
     })
   }
 
+  function endCall() {
+    webrtc.disconnect()
+  }
+
   function sendOffer() {
     console.log(UserService.getUser())
     console.log(UserService.getUserID())
@@ -22,6 +28,10 @@ function CallService (UserService) {
 
     socket.on('callAccepted', function (receiverID) {
       startCall(receiverID)
+    })
+
+    socket.on('callRejected', function (receiverID) {
+      
     })
   }
 
@@ -39,7 +49,8 @@ function CallService (UserService) {
   })
 
   return { sendOffer : sendOffer
-  }
+         , endCall : endCall
+         }
 }
 
 angular.module('Intercom')

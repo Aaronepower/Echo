@@ -25,8 +25,8 @@ function IntercomRun ($rootScope, $location, API, TokenService, UserService) {
           API.User.validate(function (response) {
             UserService.createUser(response.token)
             TokenService.setToken(response.token)
+            socket.emit('logged-in', UserService.getUserID())
           }, function (response) {
-            TokenService.setToken(response.token)
             $location.path('/')
           })
         }

@@ -3,9 +3,9 @@ section(class="twelve columns" ng-controller="DashboardController as dash")
   h2 Hi, {{dash.email}}
   video#local(width="400" height="400")
   div#remotes
-  div#messages(contenteditable)
   section(class = "twelve columns" ng-controller="CallController as call")
     button(ng-click="call.call()" ) Call
+    button(ng-click="call.stop()") End Call
   table
     tbody(quick-ng-repeat="friend in dash.friends track by $id(friend)")
       tr    
