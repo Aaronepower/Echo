@@ -51,5 +51,5 @@ function CallService (UserService) {
          }
 }
 
-angular.module('Intercom')
+angular.module('Echo')
 .factory('CallService', CallService)

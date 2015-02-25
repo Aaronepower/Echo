@@ -16,7 +16,9 @@ build/Release
 node_modules
 
 # Files built with Gulp use 'gulp <options>' instead
-public
+public/javascripts
+public/stylesheets
+public/img
 # Bower Dependencies
 bower_components
 .bowerrc

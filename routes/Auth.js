@@ -1,5 +1,5 @@
 var User  = require('../bin/User')
-  , debug = require('debug')('Intercom')
+  , debug = require('debug')('Echo')
 /**
  * @apiDefine Auth
  *  Middleware to prevent unauthorized requests without a token.

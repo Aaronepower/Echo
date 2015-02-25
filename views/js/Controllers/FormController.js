@@ -1,7 +1,7 @@
 function FormController (API, UserService) {
   this.submit = function (user) {
-    API.User.signin(user, UserService.loginSuccess, UserService.loginError)
+    API.signin(user, UserService.loginSuccess, UserService.loginError)
   }
 }
-angular.module('Intercom')
+angular.module('Echo')
 .controller('FormController', FormController)

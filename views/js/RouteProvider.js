@@ -1,6 +1,6 @@
-var socket = io.connect('http://172.18.15.19')
+var socket = io.connect(location.origin)
 
-function IntercomConfig ($routeProvider, $httpProvider, jwtInterceptorProvider) {
+function EchoConfig ($routeProvider, $httpProvider, jwtInterceptorProvider) {
   $routeProvider
   .when('/register', { templateUrl: 'partials/register' })
   .when('/dashboard', { templateUrl: 'partials/dashboard'
@@ -17,12 +17,12 @@ function IntercomConfig ($routeProvider, $httpProvider, jwtInterceptorProvider) 
   $httpProvider.interceptors.push('jwtInterceptor')
 }
 
-function IntercomRun ($rootScope, $location, API, TokenService, UserService) {
+function EchoRun ($rootScope, $location, API, TokenService, UserService) {
   $rootScope.$on('$routeChangeStart', function (event, next) {
     if (next.access) {
       if (next.access.tokenRequired) {
         if (TokenService.tokenExists()) {
-          API.User.validate(function (response) {
+          API.validate(function (response) {
             UserService.loginEvent(response.token)
           }, function (response) {
             $location.path('/')
@@ -36,6 +36,6 @@ function IntercomRun ($rootScope, $location, API, TokenService, UserService) {
   })
 }
 
-angular.module('Intercom', ['ngRoute', 'ngResource', 'angular-jwt'])
-.config(IntercomConfig)
-.run(IntercomRun)
+angular.module('Echo', ['ngRoute', 'ngResource', 'angular-jwt'])
+.config(EchoConfig)
+.run(EchoRun)

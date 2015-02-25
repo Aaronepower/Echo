@@ -1,6 +1,6 @@
 {
-  "name": "WebCalls",
-  "version": "0.1.0",
+  "name": "Echo",
+  "version": "0.5.0",
   "private": true,
   "dependencies": {
     "body-parser": "~1.8.1",
@@ -40,9 +40,9 @@
   },
   "apidoc": {
     "name": "REST API Docs",
-    "version": "0.1.0",
+    "version": "0.5.0",
     "description": "Documentation on the User, and Message Endpoints",
-    "title": "Intercom API",
+    "title": "Echo API",
     "url": "localhost",
     "sampleUrl": "localhost"
   }

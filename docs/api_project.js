@@ -2,7 +2,7 @@ define({
   "name": "REST API Docs",
   "version": "0.1.0",
   "description": "Documentation on the User, and Message Endpoints",
-  "title": "Intercom API",
+  "title": "Echo API",
   "url": "localhost",
   "sampleUrl": "localhost",
   "apidoc": "0.2.0",
