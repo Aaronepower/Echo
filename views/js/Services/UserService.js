@@ -1,5 +1,6 @@
 function UserService ($location, jwtHelper, TokenService) {
   var user
+    , friends
     , friendID = ''
 
   function createUser (token) {
@@ -14,6 +15,20 @@ function UserService ($location, jwtHelper, TokenService) {
 
   function getUserID () {
     return user._id
+  }
+
+  function setFriends (newFriends) {
+    friends = newFriends
+  }
+
+
+  function getFriendFromID (friend) {
+    for (var i = 0; i < friends.length; i++) {
+      if (friends[i]._id === friend) {
+        return friends[i]
+      }
+    }
+    return null
   }
 
   function setFriend(newFriendID) {

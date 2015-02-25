@@ -1,5 +1,36 @@
 function CallService (UserService) {
-  var webrtc 
+  var webrtc
+
+
+  function notify (message, useAlert, useConfirm) {
+    var notificationOptions = { icon : 'favicons/favicon-196x196.png' }
+    if (!("Notification" in window)) {
+      if (useAlert) {
+        alert(message)
+      }
+      else if (useConfirm) {
+        return confirm(message)
+      }
+    }
+    else if (Notification.permission === 'granted') {
+      new Notification(message, notificationOptions)
+    }
+    else if (Notification.permission !== 'denied') {
+      Notification.requestPermission(function (permission) {
+        if (permission === 'granted') {
+          new Notification(message, notificationOptions)
+        }
+      })
+    }
+    else {
+      if (useAlert) {
+        alert(message)
+      }
+      else if (useConfirm) {
+        return confirm(message)
+      }
+    }
+  }
 
   function startCall(ID) {
     webrtc = new SimpleWebRTC({
@@ -24,6 +55,10 @@ function CallService (UserService) {
 
     socket.on('callAccepted', function (receiverID) {
       startCall(receiverID)
+    })
+
+    socket.on('userOffline', function (receiverID) {
+
     })
 
     socket.on('callRejected', function (receiverID) {
@@ -52,4 +87,4 @@ function CallService (UserService) {
 }
 
 angular.module('Echo')
-.factory('CallService', CallService)
+       .factory('CallService', CallService)

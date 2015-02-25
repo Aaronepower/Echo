@@ -2,10 +2,10 @@ div.row(ng-controller="DashboardController as dash")
   div.two.columns.friendsList
     ul
       li 
-        input.u-full-width.searchBar(placeholder="Search" type="text" ng-model="search.username")
+        input.u-full-width.searchBar(placeholder="Search" type="text" ng-model="dash.search.username")
       li( ng-dblclick="dash.setFriend(friend._id); dash.call()" 
           ng-click="dash.selectedFriend(friend)" 
-          ng-repeat="friend in dash.friends track by $id(friend) | filter: search"
+          ng-repeat="friend in dash.friends track by friend._id | filter: dash.search as results"
         )
         img(ng-src="{{friend.avatar ? '/img/'+friend.avatar: '/img/profile.png'}}")
         {{friend.username}}
