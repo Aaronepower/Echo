@@ -1,30 +1,35 @@
 div.row(ng-controller="DashboardController as dash")
-	div.two.columns.friendsList
-		ul
-			li 
-				input.u-full-width.searchBar(placeholder="Search" type="text" ng-model="query")
-			li(ng-dblclick="dash.setFriend(friend._id); dash.call()" ng-click="dash.selectedFriend(friend)" ng-repeat="friend in dash.friends track by $id(friend) | filter: query")
-				img(ng-src="{{friend.avatar ? '/img/'+friend.avatar: '/img/profile.png'}}")
-				p {{friend.email}}
-	div.ten.columns.mainBody
-		header.u-full-width.navbar
-			ul#navbar
-				li
-					button Add Friend
-				li 
-					button(ng-click="dash.settings()") Settings
-		div.row.u-full-width.topRow
-			img#avatar(ng-src="{{dash.avatar ? '/img/'+dash.avatar: '/img/profile.png'}}")
-			ul.friendDetails
-				li
-					h1 {{dash.email}}
-				li
-					button(ng-click="dash.call()") Call
-				li
-					button Remove
-				li
-					button(ng-click="dash.endCall()") End Call
-		div.row.u-full-width.bottomRow
-			div.six.columns
-				video.u-full-width#local
-			div.six.columns#remotes
+  div.two.columns.friendsList
+    ul
+      li 
+        input.u-full-width.searchBar(placeholder="Search" type="text" ng-model="search.username")
+      li( ng-dblclick="dash.setFriend(friend._id); dash.call()" 
+          ng-click="dash.selectedFriend(friend)" 
+          ng-repeat="friend in dash.friends track by $id(friend) | filter: search"
+        )
+        img(ng-src="{{friend.avatar ? '/img/'+friend.avatar: '/img/profile.png'}}")
+        {{friend.username}}
+  div.ten.columns.mainBody
+    header.u-full-width.navbar
+      ul#navbar
+        li
+          button(ng-click="dash.showAddbar=true") Add Friend
+          input(ng-show="dash.showAddbar" ng-model="queries.addQuery")
+          button(ng-show="dash.showAddbar" ng-click="dash.addFriend(queries.addQuery); dash.showAddbar=false") Add 
+          button(ng-show="dash.showAddbar" ng-click="dash.showAddbar=false") Cancel
+        li 
+          button Settings
+    div.row.u-full-width.topRow
+      img#avatar(ng-src="{{dash.selected.avatar ? '/img/'+dash.selected.avatar: '/img/profile.png'}}")
+      ul.friendDetails
+        li
+          h1 {{dash.selected.username}}
+          img(ng-src="/img/profile.png")
+        li
+          button(ng-click="dash.call()") Call
+        li
+          button(ng-click="dash.removeFriend()") Remove
+    div.row.u-full-width.bottomRow
+      div.six.columns
+        video.u-full-width#local(height="400")
+      div.six.columns#remotes
