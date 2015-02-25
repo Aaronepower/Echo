@@ -1,6 +1,6 @@
 function UserService ($location, jwtHelper, TokenService) {
   var user
-    , friendID = '54e482b72325e9f81397d1de'
+    , friendID = ''
 
   function createUser (token) {
     user = jwtHelper.decodeToken(token)
@@ -50,5 +50,5 @@ function UserService ($location, jwtHelper, TokenService) {
          }
 }
 
-angular.module('Intercom')
+angular.module('Echo')
       .factory('UserService', UserService)

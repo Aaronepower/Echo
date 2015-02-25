@@ -2,7 +2,7 @@ function DashboardController ($location, UserService, API, CallService, TokenSer
   var vm = this
 
   function getFriendsList () {
-    API.User.query(function (response) {
+    API.query(function (response) {
       vm.friends = response
     })
   }
@@ -16,16 +16,15 @@ function DashboardController ($location, UserService, API, CallService, TokenSer
     CallService.stop()
     // TODO Added the hide video logic here
   }
-  this.addFriend = function (friend) {
-    API.User.add(friend, friendsListChange)
+  this.addFriend = function (username) {
+    API.add({username : username}, friendsListChange)
   }
-  this.removeFriend = function (friend) {
-    API.User.remove(friend, friendsListChange)
+  this.removeFriend = function () {
+    API.remove({friendId : UserService.getFriend() }, friendsListChange)
   }
 
   this.selectedFriend = function (friend) {
-    vm.email = friend.email
-    vm.avatar = friend.avatar
+    vm.selected = friend
     UserService.setFriend(friend._id)
   }
 
@@ -35,5 +34,5 @@ function DashboardController ($location, UserService, API, CallService, TokenSer
   
   getFriendsList()
 }
-angular.module('Intercom')
+angular.module('Echo')
 .controller('DashboardController', DashboardController)

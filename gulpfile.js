@@ -79,7 +79,7 @@ gulp.task('scripts', ['js-lint'], function() {
   return gulp.src(paths.scripts)
              .pipe(ngAnnotate())
              .pipe(sourcemaps.init())
-             .pipe(concat('intercom.js'))
+             .pipe(concat('echo.js'))
              .pipe(wrap('(function (){\n "use strict";\n <%= contents %>\n})();'))
              .pipe(uglify())
              .pipe(sourcemaps.write())

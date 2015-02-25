@@ -1,5 +1,5 @@
 var router    = require('express').Router()
-  , debug     = require('debug')('Intercom')
+  , debug     = require('debug')('Echo')
   , User      = require('../bin/User')
   , jwt       = require('jsonwebtoken')
   , jwtSecret = 'Super Secret'
@@ -260,12 +260,8 @@ router.post('/signin', function (req, res) {
 router.post('/add', authorize, function (req, res) {
   debug('/add POST request:\n', req.body)
   var user = req.user
-    , query = { $or : [ {email : req.body.email}
-                      , {username : req.body.username}
-                      ]
-              }
-    
-  User.findOne(query, function (err, friend) {
+
+  User.findOne({username : req.body.username}, function (err, friend) {
     if (err)
       res.send(err)
 
@@ -274,12 +270,14 @@ router.post('/add', authorize, function (req, res) {
     }
     else {
       if (!~user.friendsList.indexOf(friend._id.str)) {
-        user.friendsList.push(friend._id.str)
+        debug('friends list index: ', ~user.friendsList.indexOf(friend._id.str))
+        debug('friend id type: ', friend._id)
+        user.friendsList.push(friend._id)
       }
 
       if (!~friend.friendsList.indexOf(user._id.str) 
           && !~friend.pendingList.indexOf(user._id.str))  {
-        friend.pendingList.push(user._id.str)
+        friend.pendingList.push(user._id)
       }
       friend.save()
       user.token = jwt.sign(safeUser(user, true), jwtSecret)
@@ -331,12 +329,12 @@ router.post('/remove', authorize, function (req, res) {
     if (err)
       res.send(err)
 
-    var friendIndex = friend.friendsList.indexOf(user._id.str)
+    var friendIndex = friend.friendsList.indexOf(user._id)
     if (~friendIndex) {
       friend.friendsList.splice(friendIndex, 1)
     }
 
-    var pendingIndex = friend.pendingList.indexOf(user._id.str)
+    var pendingIndex = friend.pendingList.indexOf(user._id)
     if (~pendingIndex) {
       friend.pendingList.splice(pendingIndex, 1)
     

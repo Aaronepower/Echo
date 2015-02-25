@@ -23,5 +23,5 @@ function TokenService ($window) {
   return tokenService
 }
 
-angular.module('Intercom')
+angular.module('Echo')
        .factory('TokenService', TokenService) 

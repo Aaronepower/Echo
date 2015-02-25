@@ -15,7 +15,6 @@ var routes   = require('./routes/index')
 app.set('views', path.join(__dirname, 'views/jade'))
 app.set('view engine', 'jade')
 app.use(compression())
-// uncomment after placing your favicon in /public
 app.use(favicon(__dirname + '/public/favicons/favicon.ico'))
 app.use(logger('dev'))
 app.use(bodyParser.json())

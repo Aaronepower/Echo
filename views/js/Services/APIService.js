@@ -28,8 +28,8 @@ function APIService ($http, $resource, TokenService) {
                                      }
                         }
                       )
-  return { User : User }
+  return User
 }
 
-angular.module('Intercom')
+angular.module('Echo')
        .factory('API', APIService)
