@@ -5,7 +5,7 @@ div.container
       h2 Login
       ul
         li
-          input.u-full-width(name="loginEmail" type="email" placeholder="Email" ng-model="user.email" value = "" required autofocus)
+          input.u-full-width(name="loginEmail" type="email" placeholder="Username or Email" ng-model="user.email" value = "" required autofocus)
           span(ng-show="form.loginEmail.$dirty && form.loginEmail.$error.required") Required!
           span(ng-show="form.loginEmail.$dirty && form.loginEmail.$error.email") Not a vaild email!
         li

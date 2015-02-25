@@ -28,17 +28,7 @@ function APIService ($http, $resource, TokenService) {
                                      }
                         }
                       )
-  var Message = $resource( '/api/messages/'
-                         , { query : { method : 'GET'
-                                     , isArray : true
-                                     }
-                           , save : { method : 'POST'
-                                    }
-                           } 
-                         )
-  return { User : User
-         , Message: Message
-         }
+  return { User : User }
 }
 
 angular.module('Intercom')

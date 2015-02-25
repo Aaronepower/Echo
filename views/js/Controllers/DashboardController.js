@@ -1,10 +1,6 @@
 function DashboardController (UserService, API, CallService, TokenService) {
-  var loaded = false
-    , vm = this
-  // Unsure if needed anymore
-  document.addEventListener('userCreated', function (event) {
-    vm.email = event.detail.email
-  })
+  var vm = this
+
   function getFriendsList () {
     API.User.query(function (response) {
       vm.friends = response
@@ -20,13 +16,18 @@ function DashboardController (UserService, API, CallService, TokenService) {
     CallService.stop()
     // TODO Added the hide video logic here
   }
-  this.addFriend = function (user) {
-    API.User.add(user, friendsListChange)
+  this.addFriend = function (friend) {
+    API.User.add(friend, friendsListChange)
   }
-  this.removeFriend = function (user) {
-    API.User.remove(user, friendsListChange)
+  this.removeFriend = function (friend) {
+    API.User.remove(friend, friendsListChange)
   }
-  this.setFriend = UserService.setFriend
+
+  this.selectedFriend = function (friend) {
+    vm.email = friend.email
+    vm.avatar = friend.avatar
+    UserService.setFriend(friend._id)
+  }
   
   getFriendsList()
 }
