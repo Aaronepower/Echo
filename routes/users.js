@@ -14,6 +14,8 @@ var router    = require('express').Router()
  *
  * @apiSuccess {Object[]} List of friends.
  * 
+ * @apiSampleRequest /api/users/
+ *
  * @apiSuccessExample {json[]} Success Response:
  *  HTTP/1.1 200 OK
  *  [
@@ -53,9 +55,16 @@ router.get('/', authorize, function (req, res) {
       var modifiedFriends = []
       friends.forEach(function (friend) {
         friend = friend.toObject()
+
         user.pendingList.forEach(function (pendingFriendId) {
-          if (friend._id.str === pendingFriendId.str) {
+          if (friend._id == pendingFriendId) {
             friend.pending = true
+          }
+        })
+
+        friend.pendingList.forEach(function (pendingUserId) {
+          if (user._id.str === pendingUserId.str) {
+            friend.hasntAccepted = true
           }
         })
 
@@ -76,6 +85,33 @@ router.get('/', authorize, function (req, res) {
   })
 })
 
+/**
+ * @api {post} /api/users/ Save a new user.
+ * @apiName AddAUser
+ * @apiGroup User
+ * 
+ * @apiParam (Body) {String} email Users' email
+ * @apiParam (Body) {String} password Users' password
+ * @apiParam (Body) {String} password Users' password
+ * @apiParam (Body) {String} confirm Users' confirm
+ * @apiParam (Body) {String} [username] Users' username
+ * @apiParam (Body) {String} [avatar] Users' avatar
+ *
+ * @apiSuccess {Object} Token Users' token
+ * 
+ * @apiSuccessExample {Object} Success Response:
+ *  HTTP/1.1 200 OK
+ *    {
+ *    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdmF0YXIiOiIiLCJ1c2VybmFtZSI6IiIsImVtYWlsIjoidGVzdGVyM0B0ZXN0Lm5ldCIsIl9pZCI6IjU0ZWM2OTNmY2Q0Njg5MjgyYTM4YjExOCIsImlhdCI6MTQyNDc3OTU4M30.dbvHElTZ2vPxNX9qBSmWBSBLjKdqwt-3dt5HuTvJmE8"
+ *    }
+ * @apiError 403 Details are incorrect.
+ * @apiError 409 A user with that email already exists.
+ * 
+ * @apiErrorExample 403 Response:
+ *   HTTP/1.1 403 Forbidden
+ * @apiErrorExample 409 Response:
+ *    HTTP/1.1 409 Conflict
+ */
 router.post('/', function (req, res) {
   debug('/signup POST request:\n', req.body)
 
@@ -108,6 +144,28 @@ router.post('/', function (req, res) {
   })
 })
 
+/**
+ * @api {put} /api/users/ Update a Users' information.
+ * @apiName UpdateAUser
+ * @apiGroup User
+ * 
+ * @apiParam (Body) {String} [email] Users' email
+ * @apiParam (Body) {String} [password] Users' password
+ * @apiParam (Body) {String} [password] Users' password
+ * @apiParam (Body) {String} [confirm] Users' confirm
+ * @apiParam (Body) {String} [username] Users' username
+ * @apiParam (Body) {String} [avatar] Users' avatar
+ *
+ * @apiSuccess {Object} Token Users' token
+ * 
+ * @apiSuccessExample {Object} Success Response:
+ *  HTTP/1.1 200 OK
+ *    {
+ *    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdmF0YXIiOiIiLCJ1c2VybmFtZSI6IiIsImVtYWlsIjoidGVzdGVyM0B0ZXN0Lm5ldCIsIl9pZCI6IjU0ZWM2OTNmY2Q0Njg5MjgyYTM4YjExOCIsImlhdCI6MTQyNDc3OTU4M30.dbvHElTZ2vPxNX9qBSmWBSBLjKdqwt-3dt5HuTvJmE8"
+ *    }
+ * 
+ * @apiUse Auth
+ */
 router.put('/', authorize, function (req, res) {
   debug('/update PUT request:\n', req.body)
   var user = req.user
@@ -123,6 +181,18 @@ router.put('/', authorize, function (req, res) {
   res.send({token : user.token})
 })
 
+/**
+ * @api {delete} /api/users/ Delete a User.
+ * @apiName DeleteAUser
+ * @apiGroup User
+ * 
+ * @apiSuccess (Success 204) StatusCode the status code.
+ * 
+ * @apiSuccessExample {Object} Success Response:
+ *  HTTP/1.1 204 No Content
+ * 
+ * @apiUse Auth
+ */
 router.delete('/', authorize, function (req, res) {
   User.remove({_id : req.user._id}, function (err) {
     if (err) {
@@ -203,13 +273,13 @@ router.post('/add', authorize, function (req, res) {
       res.status(404).end()
     }
     else {
-      if (!~user.friendsList.indexOf(friend._id)) {
-        user.friendsList.push(friend._id)
+      if (!~user.friendsList.indexOf(friend._id.str)) {
+        user.friendsList.push(friend._id.str)
       }
 
-      if (!~friend.friendsList.indexOf(user._id) 
-          && !~friend.pendingList.indexOf(user._id))  {
-        friend.pendingList.push(user._id)
+      if (!~friend.friendsList.indexOf(user._id.str) 
+          && !~friend.pendingList.indexOf(user._id.str))  {
+        friend.pendingList.push(user._id.str)
       }
       friend.save()
       user.token = jwt.sign(safeUser(user, true), jwtSecret)
@@ -261,12 +331,12 @@ router.post('/remove', authorize, function (req, res) {
     if (err)
       res.send(err)
 
-    var friendIndex = friend.friendsList.indexOf(user._id)
+    var friendIndex = friend.friendsList.indexOf(user._id.str)
     if (~friendIndex) {
       friend.friendsList.splice(friendIndex, 1)
     }
 
-    var pendingIndex = friend.pendingList.indexOf(user._id)
+    var pendingIndex = friend.pendingList.indexOf(user._id.str)
     if (~pendingIndex) {
       friend.pendingList.splice(pendingIndex, 1)
     
@@ -280,6 +350,25 @@ router.post('/remove', authorize, function (req, res) {
   res.send({token : user.token})
 })
 
+/**
+ * @api {get} /api/users/validate Ensure the users' token is valid.
+ * @apiName Validate Users' token
+ * @apiGroup User
+ * 
+ * @apiHeader {String} Token Access key.
+ *
+ * @apiSuccess {Object} Users' token.
+ * 
+ * @apiSampleRequest api/users/validate
+ *
+ * @apiSuccessExample {Object} Success Response:
+ *  HTTP/1.1 200 OK
+ *    {
+ *    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdmF0YXIiOiIiLCJ1c2VybmFtZSI6IiIsImVtYWlsIjoidGVzdGVyM0B0ZXN0Lm5ldCIsIl9pZCI6IjU0ZWM2OTNmY2Q0Njg5MjgyYTM4YjExOCIsImlhdCI6MTQyNDc3OTU4M30.dbvHElTZ2vPxNX9qBSmWBSBLjKdqwt-3dt5HuTvJmE8"
+ *    }
+ *
+ * @apiUse  Auth
+ */
 router.get('/validate',authorize, function (req, res) {
   var user = req.user
   debug('Token Sent: ', user.token)

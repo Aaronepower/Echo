@@ -7,7 +7,6 @@ var express      = require('express')
   , session      = require('express-session')
 
 var routes   = require('./routes/index')
-  , messages = require('./routes/messages')
   , users    = require('./routes/users')
   , app      = express()
   , apiPath = '/api/'
@@ -36,8 +35,6 @@ app.use(function (req, res, next) {
 app.use('/', routes)
 // route = localhost/api/users/
 app.use(apiPath+'users/', users)
-// route = localhost/api/messages/
-app.use(apiPath+'messages/', messages)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

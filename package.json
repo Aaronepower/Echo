@@ -43,6 +43,7 @@
     "version": "0.1.0",
     "description": "Documentation on the User, and Message Endpoints",
     "title": "Intercom API",
-    "url": "localhost"
+    "url": "localhost",
+    "sampleUrl": "localhost"
   }
 }

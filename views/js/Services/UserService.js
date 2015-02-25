@@ -28,7 +28,8 @@ function UserService ($location, jwtHelper, TokenService) {
     createUser(token)
     TokenService.setToken(token)
     socket.emit('logged-in', getUserID())
-}
+  }
+
   function loginSuccess(response) {
     loginEvent(response.token)
     $location.path('/dashboard')
