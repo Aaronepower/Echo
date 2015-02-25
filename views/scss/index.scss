@@ -45,6 +45,10 @@ video {
 	overflow-y: auto;
 }
 
+.friendsList li {
+	cursor: pointer;
+}
+
 .friendsList p {
 	float: right;
 	text-align: center;
@@ -72,6 +76,7 @@ video {
 #navbar li {
 	display: inline;
 	margin: 10px;
+	cursor: pointer;
 }
 
 .searchBar {

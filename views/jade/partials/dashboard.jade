@@ -10,9 +10,11 @@ div.row(ng-controller="DashboardController as dash")
 		header.u-full-width.navbar
 			ul#navbar
 				li
-					button Add Friend
+					img(ng-src="/img/addIcon.png")
 				li 
-					button(ng-click="dash.settings()") Settings
+					img(ng-click="dash.settings()" ng-src="/img/settingsIcon.png")
+				li
+					img(ng-src="/img/logoutIcon.png")
 		div.row.u-full-width.topRow
 			img#avatar(ng-src="{{dash.avatar ? '/img/'+dash.avatar: '/img/profile.png'}}")
 			ul.friendDetails

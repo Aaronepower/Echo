@@ -39,6 +39,6 @@ function IntercomRun ($rootScope, $location, API, TokenService, UserService) {
   })
 }
 
-angular.module('Intercom', ['ngRoute', 'ngResource', 'angular-jwt'])
+angular.module('Echo', ['ngRoute', 'ngResource', 'angular-jwt'])
 .config(IntercomConfig)
 .run(IntercomRun)
