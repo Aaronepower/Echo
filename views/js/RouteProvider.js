@@ -1,9 +1,12 @@
-var socket = io.connect('http://172.18.15.19')
+var socket = io.connect('localhost')
 
 function IntercomConfig ($routeProvider, $httpProvider, jwtInterceptorProvider) {
   $routeProvider
-  .when('/register', { templateUrl: 'partials/register' })
+  .when('/register',  { templateUrl: 'partials/register' })
   .when('/dashboard', { templateUrl: 'partials/dashboard'
+                      , access : {tokenRequired : true}
+                      })
+  .when('/settings',  { templateUrl: 'partials/settings'
                       , access : {tokenRequired : true}
                       })
   .otherwise({ redirectTo: '/login'

@@ -8,6 +8,9 @@ div.container
           span(ng-show="form.registerEmail.$dirty && form.registerEmail.$error.required") Required!
           span(ng-show="form.registerEmail.$dirty && form.registerEmail.$error.email") Not a vaild email!
         li
+          input.u-full-width(name="registerUsername" type="text" placeholder="Username" ng-model="user.username" ng-minlength="5" required)
+          span(ng-show="form.registerUsername.$dirty && form.registerUsername.$error.required") Required!
+        li
           input.u-full-width(name="registerPassword" type="password" placeholder="Password" ng-model="user.password" ng-minlength="5" ng-maxlength="30" required)
           span(ng-show="form.registerPassword.$dirty && form.registerPassword.$error.required") Required!
           span(ng-show="form.registerPassword.$dirty && form.registerPassword.$error.minlength") Password too short!
@@ -20,5 +23,3 @@ div.container
         li
           input(type="submit" class="button" value="Register" ng-disabled="form.$invalid" ng-click="form.submit(user)")
           a(href="#/login") Login here!
-
-

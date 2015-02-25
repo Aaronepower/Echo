@@ -22,13 +22,15 @@ img{
 	height: 40px;
 }
 
-input[type="text"]{
-	background-color: #262B2F;
+button {
 	border: 1px solid #fff;
 }
 
-button {
-	border: 1px solid #fff;
+video {
+	width: 640px;
+	height: 480px;
+	margin-left: 20px;
+	margin-top: 20px;
 }
 
 .login {
@@ -44,10 +46,10 @@ button {
 }
 
 .friendsList p {
+	float: right;
 	text-align: center;
-	width: 120px;
-	margin: 0;
-	margin-right: 0px;
+	margin: 10px 10px 10px 10px;
+	font-size: 1.2em;
 }
 
 .mainBody {

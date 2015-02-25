@@ -1,4 +1,4 @@
-function DashboardController (UserService, API, CallService, TokenService) {
+function DashboardController ($location, UserService, API, CallService, TokenService) {
   var vm = this
 
   function getFriendsList () {
@@ -27,6 +27,10 @@ function DashboardController (UserService, API, CallService, TokenService) {
     vm.email = friend.email
     vm.avatar = friend.avatar
     UserService.setFriend(friend._id)
+  }
+
+  this.settings = function () {
+    $location.path('/settings')
   }
   
   getFriendsList()

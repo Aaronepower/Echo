@@ -1,0 +1,15 @@
+div.container
+  div.row
+    form.six.columns(ng-controller="")
+      h2 Account Settings
+      ul
+        li
+          input.u-full-width(name="settingsEmail" type="email" placeholder="Email" ng-model="" required autofocus)
+        li
+          input.u-full-width(name="registerUsername" type="text" placeholder="Username" ng-model="" ng-minlength="5" required)
+        li
+          input.u-full-width(name="registerPassword" type="password" placeholder="Password" ng-model="" ng-minlength="5" ng-maxlength="30" required)
+        li
+          input.u-full-width(name="registerConfirm" type="password" placeholder="Confirm Password" ng-model="" ng-minlength="5" ng-maxlength="30" required)
+        li
+          input(type="submit" class="button" value="Update" ng-click="")
