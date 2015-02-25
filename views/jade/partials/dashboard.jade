@@ -4,9 +4,9 @@ div.row(ng-controller="DashboardController as dash")
 			li 
 				input.u-full-width.searchBar(placeholder="Search" type="text" ng-model="query")
 			li(ng-repeat="friend in dash.friends track by $id(friend) | filter: query")
-				img(ng-src="{{friend.avatar ? friend.avatar: '/img/profile.png'}}")
-				p {{friend.email}}
-				button.callBtn(ng-click="dash.setFriend(friend._id); dash.call()") Call
+				img(ng-src="{{friend.avatar ? '/img/'+friend.avatar: '/img/profile.png'}}")
+				{{friend.email}}
+				//- button.callBtn(ng-click="dash.setFriend(friend._id); dash.call()") Call
 	div.ten.columns.mainBody
 		header.u-full-width.navbar
 			ul#navbar

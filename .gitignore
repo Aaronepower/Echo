@@ -20,6 +20,7 @@ public
 # Bower Dependencies
 bower_components
 .bowerrc
+thumbs.db
 
 
 

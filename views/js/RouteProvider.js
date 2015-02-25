@@ -1,4 +1,4 @@
-var socket = io()
+var socket = io.connect('http://172.18.15.19')
 
 function IntercomConfig ($routeProvider, $httpProvider, jwtInterceptorProvider) {
   $routeProvider
