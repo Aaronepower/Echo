@@ -1,3 +1,8 @@
+html{
+	background-color: #3b5169;
+	color: #fff;
+}
+
 form{
 	margin: 1.5rem 0 0 0;
 }
@@ -8,9 +13,95 @@ ul{
 
 a{
 	margin-left: 40px;
+	color: #fff;
 }
 
 img{
+	margin-left: 10px;
 	width: 40px;
 	height: 40px;
+}
+
+input[type="text"]{
+	background-color: #262B2F;
+	border: 1px solid #fff;
+}
+
+button {
+	border: 1px solid #fff;
+}
+
+.login {
+	margin: auto;
+	text-align: center;
+}
+
+.friendsList {
+	float: left;
+	background-color: #262B2F;
+	height: 100vh;
+	overflow-y: auto;
+}
+
+.friendsList p {
+	text-align: center;
+	width: 120px;
+	margin: 0;
+	margin-right: 0px;
+}
+
+.mainBody {
+	margin: 0px;
+}
+
+.navbar {
+	float: right;
+	background-color: #262B2F;
+	height: 6vh;
+}
+
+#navbar {
+	float: right;
+	display: inline;
+	margin: 10px;
+}
+
+#navbar li {
+	display: inline;
+	margin: 10px;
+}
+
+.searchBar {
+	margin: 10px;
+	width: 90%;
+}
+
+.topRow {
+	float: right;
+	background-color: #3b5169;
+	height: 40vh;
+	border-bottom: 1px solid #262B2F;
+}
+
+.friendDetails {
+	margin-top: 20px;
+}
+
+.bottomRow {
+	float: right;
+	background-color: #3b5169;
+	height: 55vh;
+}
+
+.callBtn{
+	float: right;
+	margin-right: 10px;
+	padding: 0 20px;
+}
+
+#avatar {
+	float: left;
+	width: 300px;
+	height: 300px;
+	margin: 20px;
 }
