@@ -240,10 +240,16 @@ router.delete('/', authorize, function (req, res) {
  * @apiSuccess {Object} Token Users' token
  * 
  * @apiSuccessExample {Object} Success Response:
- *  HTTP/1.1 204 No Content
- * 
- * @apiUse Auth
- */router.post('/signin', function (req, res) {
+ *  HTTP/1.1 200 OK
+ *    {
+ *    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdmF0YXIiOiIiLCJ1c2VybmFtZSI6IiIsImVtYWlsIjoidGVzdGVyM0B0ZXN0Lm5ldCIsIl9pZCI6IjU0ZWM2OTNmY2Q0Njg5MjgyYTM4YjExOCIsImlhdCI6MTQyNDc3OTU4M30.dbvHElTZ2vPxNX9qBSmWBSBLjKdqwt-3dt5HuTvJmE8"
+ *    }
+ *
+ * @apiError 404 No User was Found with that token
+ * @apiErrorExample 404 Response:
+ *    HTTP/1.1 404 Not Found
+ */
+ router.post('/signin', function (req, res) {
   debug('/signin POST request:\n', req.body)
 
   var query = { $or : [ {email : req.body.email}
@@ -266,12 +272,26 @@ router.delete('/', authorize, function (req, res) {
     }
   })
 })
-
+/**
+ * @api {post} /api/users/add Add a user.
+ * @apiName AddAUser
+ * @apiGroup User
+ * 
+ * @apiSuccess {Object} Token Users' token
+ * 
+ * @apiSuccessExample {Object} Success Response:
+ *  HTTP/1.1 200 OK
+ *    {
+ *    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdmF0YXIiOiIiLCJ1c2VybmFtZSI6IiIsImVtYWlsIjoidGVzdGVyM0B0ZXN0Lm5ldCIsIl9pZCI6IjU0ZWM2OTNmY2Q0Njg5MjgyYTM4YjExOCIsImlhdCI6MTQyNDc3OTU4M30.dbvHElTZ2vPxNX9qBSmWBSBLjKdqwt-3dt5HuTvJmE8"
+ *    }
+ * 
+ * @apiUse Auth
+ */
 router.post('/add', authorize, function (req, res) {
   debug('/add POST request:\n', req.body)
   var user = req.user
 
-  User.findOne({username : req.body.username}, function (err, friend) {
+  User.findOne({email : req.body.email}, function (err, friend) {
     if (err)
       res.send(err)
 
@@ -296,7 +316,21 @@ router.post('/add', authorize, function (req, res) {
     }
   })
 })
-
+/**
+ * @api {post} /api/users/accept Accept a users' friend request.
+ * @apiName AcceptAUser
+ * @apiGroup User
+ * 
+ * @apiSuccess {Object} Token Users' token
+ * 
+ * @apiSuccessExample {Object} Success Response:
+ *  HTTP/1.1 200 OK
+ *    {
+ *    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdmF0YXIiOiIiLCJ1c2VybmFtZSI6IiIsImVtYWlsIjoidGVzdGVyM0B0ZXN0Lm5ldCIsIl9pZCI6IjU0ZWM2OTNmY2Q0Njg5MjgyYTM4YjExOCIsImlhdCI6MTQyNDc3OTU4M30.dbvHElTZ2vPxNX9qBSmWBSBLjKdqwt-3dt5HuTvJmE8"
+ *    }
+ * 
+ * @apiUse Auth
+ */
 router.post('/accept', authorize, function(req, res) {
   debug('/accept POST request:\n', req.body)
   var user     = req.user
@@ -316,6 +350,24 @@ router.post('/accept', authorize, function(req, res) {
   res.send({token : user.token})
 })
 
+/**
+ * @api {post} /api/users/accept Remove a user.
+ * @apiName RemoveAUser
+ * @apiGroup User
+ * 
+ * @apiSuccess {Object} Token Users' token
+ * 
+ * @apiSuccessExample {Object} Success Response:
+ *  HTTP/1.1 200 OK
+ *    {
+ *    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdmF0YXIiOiIiLCJ1c2VybmFtZSI6IiIsImVtYWlsIjoidGVzdGVyM0B0ZXN0Lm5ldCIsIl9pZCI6IjU0ZWM2OTNmY2Q0Njg5MjgyYTM4YjExOCIsImlhdCI6MTQyNDc3OTU4M30.dbvHElTZ2vPxNX9qBSmWBSBLjKdqwt-3dt5HuTvJmE8"
+ *    }
+ * @apiError 400 User isn't a friend
+ * @apiErrorExample {400} 400 Response:
+ *  HTTP/1.1 400 Bad Request
+ *
+ * @apiUse Auth
+ */
 router.post('/remove', authorize, function (req, res) {
   debug('/remove POST request:\n', req.body)
   var user = req.user
@@ -383,6 +435,8 @@ router.get('/validate',authorize, function (req, res) {
   res.send({token : user.token})
 })
 
+// Function to remove sensitive information of the user's friends,
+// and to prevent the users' token from exponentially.
 function safeUser(user, deleteToken) {
   var newUser = user.toObject()
 
@@ -396,4 +450,5 @@ function safeUser(user, deleteToken) {
   }
   return newUser
 }
+
 module.exports = router

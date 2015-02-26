@@ -21,5 +21,5 @@ div.container
           span(ng-show="form.registerConfirm.$dirty && form.registerConfirm.$error.minlength") Password too short!
           span(ng-show="form.registerConfirm.$dirty && form.registerConfirm.$error.maxlength") Password too long!
         li
-          input(type="submit" class="button" value="Register" ng-disabled="form.$invalid" ng-click="form.submit(user)")
+          input(type="submit" class="button" value="Register" ng-disabled="form.$invalid" ng-click="form.signup(user)")
           a(href="#/login") Login here!

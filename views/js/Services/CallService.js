@@ -4,7 +4,7 @@ function CallService (UserService) {
 
   function notify (message, useAlert, useConfirm) {
     var notificationOptions = { icon : 'favicons/favicon-196x196.png' }
-    if (!("Notification" in window)) {
+    if (!('Notification' in window)) {
       if (useAlert) {
         alert(message)
       }
@@ -49,8 +49,8 @@ function CallService (UserService) {
   }
 
   function sendOffer() {
-    console.log(UserService.getUser())
     console.log(UserService.getUserID())
+    console.log(UserService.getFriend())
     socket.emit('callOffer', UserService.getUserID(), UserService.getFriend())
 
     socket.on('callAccepted', function (receiverID) {

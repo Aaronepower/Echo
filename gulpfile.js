@@ -81,7 +81,7 @@ gulp.task('scripts', ['js-lint'], function() {
              .pipe(sourcemaps.init())
              .pipe(concat('echo.js'))
              .pipe(wrap('(function (){\n "use strict";\n <%= contents %>\n})();'))
-             .pipe(uglify())
+             // .pipe(uglify())
              .pipe(sourcemaps.write())
              .pipe(gulp.dest('public/javascripts'))
 })

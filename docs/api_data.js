@@ -1,6 +1,71 @@
 define({ "api": [
   {
     "type": "post",
+    "url": "/api/users/accept",
+    "title": "Accept a users' friend request.",
+    "name": "AcceptAUser",
+    "group": "User",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>Users&#39; token</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n  \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdmF0YXIiOiIiLCJ1c2VybmFtZSI6IiIsImVtYWlsIjoidGVzdGVyM0B0ZXN0Lm5ldCIsIl9pZCI6IjU0ZWM2OTNmY2Q0Njg5MjgyYTM4YjExOCIsImlhdCI6MTQyNDc3OTU4M30.dbvHElTZ2vPxNX9qBSmWBSBLjKdqwt-3dt5HuTvJmE8\"\n  }",
+          "type": "Object"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/users.js",
+    "groupTitle": "User",
+    "sampleRequest": [
+      {
+        "url": "localhost/api/users/accept"
+      }
+    ],
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>No Token was placed into the request</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>No User was Found with that token</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "404 Response:",
+          "content": "HTTP/1.1 404 Not Found",
+          "type": "json"
+        },
+        {
+          "title": "403 Response:",
+          "content": "HTTP/1.1 403 Forbidden",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "post",
     "url": "/api/users/",
     "title": "Save a new user.",
     "name": "AddAUser",
@@ -32,7 +97,7 @@ define({ "api": [
           {
             "group": "Body",
             "type": "String",
-            "optional": true,
+            "optional": false,
             "field": "username",
             "description": "<p>Users&#39; username</p> "
           },
@@ -106,6 +171,71 @@ define({ "api": [
     ]
   },
   {
+    "type": "post",
+    "url": "/api/users/add",
+    "title": "Add a user.",
+    "name": "AddAUser",
+    "group": "User",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>Users&#39; token</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n  \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdmF0YXIiOiIiLCJ1c2VybmFtZSI6IiIsImVtYWlsIjoidGVzdGVyM0B0ZXN0Lm5ldCIsIl9pZCI6IjU0ZWM2OTNmY2Q0Njg5MjgyYTM4YjExOCIsImlhdCI6MTQyNDc3OTU4M30.dbvHElTZ2vPxNX9qBSmWBSBLjKdqwt-3dt5HuTvJmE8\"\n  }",
+          "type": "Object"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/users.js",
+    "groupTitle": "User",
+    "sampleRequest": [
+      {
+        "url": "localhost/api/users/add"
+      }
+    ],
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>No Token was placed into the request</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>No User was Found with that token</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "404 Response:",
+          "content": "HTTP/1.1 404 Not Found",
+          "type": "json"
+        },
+        {
+          "title": "403 Response:",
+          "content": "HTTP/1.1 403 Forbidden",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
     "type": "delete",
     "url": "/api/users/",
     "title": "Delete a User.",
@@ -126,7 +256,7 @@ define({ "api": [
         {
           "title": "Success Response:",
           "content": "HTTP/1.1 204 No Content",
-          "type": "Object"
+          "type": "Status"
         }
       ]
     },
@@ -246,6 +376,136 @@ define({ "api": [
         }
       ]
     }
+  },
+  {
+    "type": "post",
+    "url": "/api/users/accept",
+    "title": "Remove a user.",
+    "name": "RemoveAUser",
+    "group": "User",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>Users&#39; token</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n  \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdmF0YXIiOiIiLCJ1c2VybmFtZSI6IiIsImVtYWlsIjoidGVzdGVyM0B0ZXN0Lm5ldCIsIl9pZCI6IjU0ZWM2OTNmY2Q0Njg5MjgyYTM4YjExOCIsImlhdCI6MTQyNDc3OTU4M30.dbvHElTZ2vPxNX9qBSmWBSBLjKdqwt-3dt5HuTvJmE8\"\n  }",
+          "type": "Object"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "400",
+            "description": "<p>User isn&#39;t a friend</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>No Token was placed into the request</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>No User was Found with that token</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "400 Response:",
+          "content": "HTTP/1.1 400 Bad Request",
+          "type": "400"
+        },
+        {
+          "title": "404 Response:",
+          "content": "HTTP/1.1 404 Not Found",
+          "type": "json"
+        },
+        {
+          "title": "403 Response:",
+          "content": "HTTP/1.1 403 Forbidden",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/users.js",
+    "groupTitle": "User",
+    "sampleRequest": [
+      {
+        "url": "localhost/api/users/accept"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/users/signin",
+    "title": "Signin a user.",
+    "name": "Signin",
+    "group": "User",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>Users&#39; token</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n  \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdmF0YXIiOiIiLCJ1c2VybmFtZSI6IiIsImVtYWlsIjoidGVzdGVyM0B0ZXN0Lm5ldCIsIl9pZCI6IjU0ZWM2OTNmY2Q0Njg5MjgyYTM4YjExOCIsImlhdCI6MTQyNDc3OTU4M30.dbvHElTZ2vPxNX9qBSmWBSBLjKdqwt-3dt5HuTvJmE8\"\n  }",
+          "type": "Object"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>No User was Found with that token</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "404 Response:",
+          "content": "HTTP/1.1 404 Not Found",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/users.js",
+    "groupTitle": "User",
+    "sampleRequest": [
+      {
+        "url": "localhost/api/users/signin"
+      }
+    ]
   },
   {
     "type": "put",

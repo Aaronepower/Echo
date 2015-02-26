@@ -14,24 +14,43 @@ var io = require('socket.io')(server)
 server.listen(app.get('port'))
 
 io.on('connection', function (socket) {
+  var room
+  , friends
   function roomIsEmpty(roomID) {
     return io.sockets.clients(roomID).length < 1
   }
-  socket.on('logged-in', function (userID, friends) {
+  socket.on('logged-in', function (userID, friendsArray) {
+    room = userID
+    friends = friendsArray
     console.log('User logged in: '+ userID)
     socket.join(userID)
+    if (friends.length > 0) {
+      friends.forEach(function (friend) {
+        if (!roomIsEmpty(friend._id)) {
+          socket.broadcast.to(userID).emit('userOnline', friend._id)
+          socket.broadcast.to(friend._id).emit('friendLogin', room)
+        }else {
+          socket.broadcast.to(userID).emit('userOffline', friend._id)
+        }
+      })
+    }
+  })
 
-    friends.forEach(function (friend) {
-      if (!roomIsEmpty(friend)) {
-        socket.emit('friendLogin', friend)
-      }
-    })
+  socket.on('disconnect', function () {
+    console.log('User: ', userID, 'disconnected')
+    if (friends.length > 0) {
+      friends.forEach(function (friend) {
+        if (!roomIsEmpty(friend)) {
+          socket.broadcast.to(friend._id).emit('friendLogoff', room)
+        }
+      })
+    }
   })
 
   socket.on('callOffer', function (senderID, receiverID) {
     console.log('Call Offer sent from: '+senderID+' to: '+receiverID)
     if (!roomIsEmpty) {
-      socket.broadcast.to(senderID).emit('userOffline')
+      socket.broadcast.to(senderID).emit('userOffline', receiverID)
     }
     else {
       socket.broadcast.to(receiverID).emit('callOffer', senderID)
@@ -40,11 +59,19 @@ io.on('connection', function (socket) {
 
   socket.on('callAccepted', function (senderID, receiverID) {
     console.log('Call Accepted to: '+senderID+' from: '+receiverID)
-    socket.broadcast.to(senderID).emit('callAccepted', receiverID)
+    if (!roomIsEmpty(senderID)) {
+      socket.broadcast.to(senderID).emit('callAccepted', receiverID)
+    } else {
+      socket.broadcast.to(receiverID).emit('userOffline', senderID)
+    }
   })
 
   socket.on('callRejected', function (senderID, receiverID) {
     console.log('Call Rejected to: '+senderID+' from: '+receiverID)
-    socket.broadcast.to(senderID).emit('callRejected', receiverID)
+    if (!roomIsEmpty(senderID)) {
+      socket.broadcast.to(senderID).emit('callRejected', receiverID)
+    } else {
+      socket.broadcast.to(receiverID).emit('userOffline', senderID)
+    }
   })
 })

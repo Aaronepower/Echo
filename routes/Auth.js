@@ -11,7 +11,6 @@ var User  = require('../bin/User')
  * @apiErrorExample 403 Response:
  *   HTTP/1.1 403 Forbidden
  */
-
 module.exports = function (req, res, next) {
   var authHeader = req.get('authorization')
   if (typeof authHeader === 'undefined'){

@@ -1,6 +1,6 @@
 function UserService ($location, jwtHelper, TokenService) {
   var user
-    , friends
+    , friends = []
     , friendID = ''
 
   function createUser (token) {
@@ -42,7 +42,7 @@ function UserService ($location, jwtHelper, TokenService) {
   function loginEvent (token) {
     createUser(token)
     TokenService.setToken(token)
-    socket.emit('logged-in', getUserID())
+    socket.emit('logged-in', getUserID(), friends)
   }
 
   function loginSuccess(response) {

@@ -1,15 +1,15 @@
 div.container
   div.row
-    form.six.columns(ng-controller="")
+    form.six.columns(ng-controller="FormController as form" ng-init="form.settings()")
       h2 Account Settings
       ul
         li
-          input.u-full-width(name="settingsEmail" type="email" placeholder="Email" ng-model="" required autofocus)
+          input.u-full-width(name="settingsEmail" type="email" placeholder="Email" ng-model="user.email" required autofocus)
         li
-          input.u-full-width(name="registerUsername" type="text" placeholder="Username" ng-model="" ng-minlength="5" required)
+          input.u-full-width(name="registerUsername" type="text" placeholder="Username" ng-model="user.username" ng-minlength="5" required)
         li
-          input.u-full-width(name="registerPassword" type="password" placeholder="Password" ng-model="" ng-minlength="5" ng-maxlength="30" required)
+          input.u-full-width(name="registerPassword" type="password" placeholder="Password" ng-model="user.password" ng-minlength="5" ng-maxlength="30" required)
         li
-          input.u-full-width(name="registerConfirm" type="password" placeholder="Confirm Password" ng-model="" ng-minlength="5" ng-maxlength="30" required)
+          input.u-full-width(name="registerConfirm" type="password" placeholder="Confirm Password" ng-model="user.confirm" ng-minlength="5" ng-maxlength="30" required)
         li
-          input(type="submit" class="button" value="Update" ng-click="")
+          input(type="submit" class="button" value="Update" ng-click="form.update(user)")

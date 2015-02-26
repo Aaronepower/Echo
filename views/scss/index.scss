@@ -1,5 +1,5 @@
 html{
-	background-color: #3b5169;
+	background-image: url(/img/background.png);
 	color: #fff;
 }
 
@@ -31,6 +31,10 @@ video {
 	height: 480px;
 	margin-left: 20px;
 	margin-top: 20px;
+}
+
+.icons {
+	fill: #fff;
 }
 
 .login {
@@ -86,7 +90,7 @@ video {
 
 .topRow {
 	float: right;
-	background-color: #3b5169;
+	// background-color: #3b5169;
 	height: 40vh;
 	border-bottom: 1px solid #262B2F;
 }
@@ -97,7 +101,7 @@ video {
 
 .bottomRow {
 	float: right;
-	background-color: #3b5169;
+	// background-color: #3b5169;
 	height: 53vh;
 }
 

@@ -1,32 +1,37 @@
 div.row(ng-controller="DashboardController as dash")
-	div.two.columns.friendsList
-		ul
-			li 
-				input.u-full-width.searchBar(placeholder="Search" type="text" ng-model="query")
-			li(ng-dblclick="dash.setFriend(friend._id); dash.call()" ng-click="dash.selectedFriend(friend)" ng-repeat="friend in dash.friends track by $id(friend) | filter: query")
-				img(ng-src="{{friend.avatar ? '/img/'+friend.avatar: '/img/profile.png'}}")
-				p {{friend.email}}
-	div.ten.columns.mainBody
-		header.u-full-width.navbar
-			ul#navbar
-				li
-					img(ng-src="/img/addIcon.png")
-				li 
-					img(ng-click="dash.settings()" ng-src="/img/settingsIcon.png")
-				li
-					img(ng-src="/img/logoutIcon.png")
-		div.row.u-full-width.topRow
-			img#avatar(ng-src="{{dash.avatar ? '/img/'+dash.avatar: '/img/profile.png'}}")
-			ul.friendDetails
-				li
-					h1 {{dash.email}}
-				li
-					button(ng-click="dash.call()") Call
-				li
-					button Remove
-				li
-					button(ng-click="dash.endCall()") End Call
-		div.row.u-full-width.bottomRow
-			div.six.columns
-				video.u-full-width#local
-			div.six.columns#remotes
+  div.two.columns.friendsList
+    ul
+      li 
+        input.u-full-width.searchBar(placeholder="Search" type="text" ng-model="dash.search.username")
+      li( ng-repeat="friend in dash.friends track by friend._id | filter: dash.search"
+          ng-click="dash.selectedFriend(friend)"
+        )
+        img(ng-src="{{friend.avatar ? '/img/'+friend.avatar: '/img/profile.png'}}")
+        p {{friend.username}}
+  div.ten.columns.mainBody
+    header.u-full-width.navbar
+      ul#navbar
+        li
+          img(ng-src="/img/add.svg" ng-click="dash.showAddbar=true" ng-hide="dash.showAddbar" alt="Add Friend")
+          input(type="text" ng-show="dash.showAddbar" ng-model="queries.addQuery")
+          img(ng-src="/img/correct.svg" ng-show="dash.showAddbar" ng-click="dash.addFriend(queries.addQuery); dash.showAddbar=false" alt="Add")
+          img(ng-src="/img/delete.svg" ng-show="dash.showAddbar" ng-click="dash.showAddbar=false" alt="Cancel")
+        li 
+          img(ng-src="/img/settings.svg" ng-click="dash.settings()" alt="Settings")
+        li
+          img(ng-src="/img/signout.svg" alt="Signout")
+    div.row.u-full-width.topRow
+      img#avatar(ng-src="{{dash.selected.avatar ? '/img/'+dash.selected.avatar: '/img/profile.png'}}")
+      ul.friendDetails
+        li
+          h1 {{dash.selected.username}}
+        li
+          button(ng-click="dash.call()") Call
+        li
+          button(ng-click="dash.removeFriend()") Remove
+        li
+          button(ng-click="dash.stop()") End Call
+    div.row.u-full-width.bottomRow
+      div.six.columns
+        video.u-full-width#local(height="400")
+      div.six.columns#remotes

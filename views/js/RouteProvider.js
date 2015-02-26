@@ -1,4 +1,4 @@
-var socket = io.connect('localhost')
+var socket = io.connect(location.origin)
 
 function IntercomConfig ($routeProvider, $httpProvider, jwtInterceptorProvider) {
   $routeProvider
@@ -25,7 +25,7 @@ function IntercomRun ($rootScope, $location, API, TokenService, UserService) {
     if (next.access) {
       if (next.access.tokenRequired) {
         if (TokenService.tokenExists()) {
-          API.User.validate(function (response) {
+          API.validate(function (response) {
             UserService.loginEvent(response.token)
           }, function (response) {
             $location.path('/')
