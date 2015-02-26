@@ -14,14 +14,28 @@ var io = require('socket.io')(server)
 server.listen(app.get('port'))
 
 io.on('connection', function (socket) {
-  socket.on('logged-in', function (userID) {
+  function roomIsEmpty(roomID) {
+    return io.sockets.clients(roomID).length < 1
+  }
+  socket.on('logged-in', function (userID, friends) {
     console.log('User logged in: '+ userID)
     socket.join(userID)
+
+    friends.forEach(function (friend) {
+      if (!roomIsEmpty(friend)) {
+        socket.emit('friendLogin', friend)
+      }
+    })
   })
 
   socket.on('callOffer', function (senderID, receiverID) {
     console.log('Call Offer sent from: '+senderID+' to: '+receiverID)
-    socket.broadcast.to(receiverID).emit('callOffer', senderID)
+    if (!roomIsEmpty) {
+      socket.broadcast.to(senderID).emit('userOffline')
+    }
+    else {
+      socket.broadcast.to(receiverID).emit('callOffer', senderID)
+    }
   })
 
   socket.on('callAccepted', function (senderID, receiverID) {

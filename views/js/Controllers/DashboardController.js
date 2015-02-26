@@ -4,6 +4,7 @@ function DashboardController ($location, UserService, API, CallService, TokenSer
   function getFriendsList () {
     API.query(function (response) {
       vm.friends = response
+      UserService.setFriends(response)
     })
   }
 

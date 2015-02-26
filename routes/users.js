@@ -92,9 +92,8 @@ router.get('/', authorize, function (req, res) {
  * 
  * @apiParam (Body) {String} email Users' email
  * @apiParam (Body) {String} password Users' password
- * @apiParam (Body) {String} password Users' password
  * @apiParam (Body) {String} confirm Users' confirm
- * @apiParam (Body) {String} [username] Users' username
+ * @apiParam (Body) {String} username Users' username
  * @apiParam (Body) {String} [avatar] Users' avatar
  *
  * @apiSuccess {Object} Token Users' token
@@ -129,7 +128,7 @@ router.post('/', function (req, res) {
       user.username = req.body.username || ''
       user.avatar = req.body.avatar || ''
 
-      if (  (user.email === '' || user.password === '') 
+      if (  (user.email === '' || user.password === '' || user.username === '') 
           && (user.password !== req.body.confirm)
          ) {
            res.status(403).end()
@@ -188,7 +187,7 @@ router.put('/', authorize, function (req, res) {
  * 
  * @apiSuccess (Success 204) StatusCode the status code.
  * 
- * @apiSuccessExample {Object} Success Response:
+ * @apiSuccessExample {Status} Success Response:
  *  HTTP/1.1 204 No Content
  * 
  * @apiUse Auth
@@ -233,7 +232,18 @@ router.delete('/', authorize, function (req, res) {
   }) 
 })
 
-router.post('/signin', function (req, res) {
+/**
+ * @api {post} /api/users/signin Signin a user.
+ * @apiName Signin
+ * @apiGroup User
+ * 
+ * @apiSuccess {Object} Token Users' token
+ * 
+ * @apiSuccessExample {Object} Success Response:
+ *  HTTP/1.1 204 No Content
+ * 
+ * @apiUse Auth
+ */router.post('/signin', function (req, res) {
   debug('/signin POST request:\n', req.body)
 
   var query = { $or : [ {email : req.body.email}
