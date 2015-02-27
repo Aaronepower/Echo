@@ -1,8 +1,8 @@
 div.row(ng-controller="DashboardController as dash")
   div.two.columns.friendsList
     ul
-      li 
-        input.u-full-width.searchBar(placeholder="Search" type="text" ng-model="dash.search.username")
+      li
+        h3 Friends
       li( ng-repeat="friend in dash.friends track by friend._id | filter: dash.search.username"
           ng-click="dash.selectedFriend(friend); dash.showUserDetails=true"
         )
@@ -10,29 +10,34 @@ div.row(ng-controller="DashboardController as dash")
         p {{friend.username}}
   div.ten.columns.mainBody
     header.u-full-width.navbar
-      img.homeButton(ng-src="/img/logo.png" ng-click="dash.showUserDetails=false")
+      img.homeButton#homeButton(ng-src="/img/logo.png" ng-click="dash.stop(); dash.hideVideo=true")
       ul#navbar
         li
           img(ng-src="/img/add.svg" ng-click="dash.showAddbar=true" ng-hide="dash.showAddbar" alt="Add Friend")
+        li
           input.addUser(type="text" placeholder="friends email" ng-show="dash.showAddbar" ng-model="queries.addQuery")
           img.addUser(ng-src="/img/correct.svg" ng-show="dash.showAddbar" ng-click="dash.addFriend(queries.addQuery); dash.showAddbar=false" alt="Add")
           img.addUser(ng-src="/img/delete.svg" ng-show="dash.showAddbar" ng-click="dash.showAddbar=false" alt="Cancel")
         li 
           img(ng-src="/img/settings.svg" ng-click="dash.settings()" alt="Settings")
         li
-          img(ng-src="/img/signout.svg" alt="Signout")
+          img(ng-src="/img/signout.svg" ng-click="dash.signout()" alt="Signout")
     div.row.u-full-width.topRow
       img#avatar(ng-src="{{dash.selected.avatar ? '/img/'+dash.selected.avatar: '/img/profile.png'}}" ng-show="dash.showUserDetails")
       ul.friendDetails
         li
           h1(ng-show="dash.showUserDetails") {{dash.selected.username}}
+          h1#welcomeMessage(ng-hide="dash.showUserDetails") Welcome, {{dash.selected.username}}
         li
-          button(ng-click="dash.call()" ng-show="dash.showUserDetails") Call
+          button(ng-click="dash.call(); dash.showVideo=true" ng-show="dash.showUserDetails && !dash.selected.pending && !dash.selected.hasntAccepted") Call
+          button(ng-click="dash.acceptFriend()" ng-show="dash.showUserDetails && dash.selected.pending") Accept
+          button(ng-click="dash.removeFriend()" ng-show="dash.showUserDetails && dash.selected.pending") Decline
+          button(ng-show="dash.showUserDetails && dash.selected.hasntAccepted") Pending
         li
           button(ng-click="dash.removeFriend()" ng-show="dash.showUserDetails") Remove
         li
-          button(ng-click="dash.stop(); dash.showVideo=true" ng-show="dash.showUserDetails") End Call
+          button(ng-click="dash.stop(); dash.hideVideo=true" ng-show="dash.showUserDetails && dash.showVideo") End Call
     div.row.u-full-width.bottomRow
       div.six.columns
-        video.u-full-width#local(ng-hide="dash.showVideo")
-      div.six.columns#remotes
+        video.u-full-width#local(ng-hide="dash.hideVideo")
+      div.six.columns#remotes(ng-hide="dash.hideVideo")

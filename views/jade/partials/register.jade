@@ -1,25 +1,31 @@
 div.container
   div.row
-    form.six.columns(ng-controller="FormController as form" name="form")
+    img.logo(ng-src="/img/logo.png")
+  div.row
+    form.six.columns(ng-controller="FormController as form" name="registerForm")
       h2 Register
       ul
         li
           input.u-full-width(name="registerEmail" type="email" placeholder="Email" ng-model="user.email" required autofocus)
-          span(ng-show="form.registerEmail.$dirty && form.registerEmail.$error.required") Required!
-          span(ng-show="form.registerEmail.$dirty && form.registerEmail.$error.email") Not a vaild email!
+          span(ng-show="form.errorStatus === 409") A User with that email already exists! 
+          span(ng-show="registerForm.registerEmail.$dirty && registerForm.registerEmail.$error.required") Required!
+          span(ng-show="registerForm.registerEmail.$dirty && registerForm.registerEmail.$error.email") Not a vaild email!
         li
           input.u-full-width(name="registerUsername" type="text" placeholder="Username" ng-model="user.username" ng-minlength="5" required)
-          span(ng-show="form.registerUsername.$dirty && form.registerUsername.$error.required") Required!
+          span(ng-show="registerForm.registerUsername.$dirty && registerForm.registerUsername.$error.required") Required!
         li
           input.u-full-width(name="registerPassword" type="password" placeholder="Password" ng-model="user.password" ng-minlength="5" ng-maxlength="30" required)
-          span(ng-show="form.registerPassword.$dirty && form.registerPassword.$error.required") Required!
-          span(ng-show="form.registerPassword.$dirty && form.registerPassword.$error.minlength") Password too short!
-          span(ng-show="form.registerPassword.$dirty && form.registerPassword.$error.maxlength") Password too long!
+          span(ng-show="registerForm.registerPassword.$dirty && registerForm.registerPassword.$error.required") Required!
+          span(ng-show="registerForm.registerPassword.$dirty && registerForm.registerPassword.$error.minlength") Password too short!
+          span(ng-show="registerForm.registerPassword.$dirty && registerForm.registerPassword.$error.maxlength") Password too long!
         li
-          input.u-full-width(name="registerConfirm" type="password" placeholder="Confirm Password" ng-model="user.confirm" ng-minlength="5" ng-maxlength="30" required)
-          span(ng-show="form.registerConfirm.$dirty && form.registerConfirm.$error.required") Required!
-          span(ng-show="form.registerConfirm.$dirty && form.registerConfirm.$error.minlength") Password too short!
-          span(ng-show="form.registerConfirm.$dirty && form.registerConfirm.$error.maxlength") Password too long!
+          input.u-full-width(name="registerConfirm" type="password" placeholder="Confirm Password" ng-model="user.confirm" match="registerForm.user.password" ng-minlength="5" ng-maxlength="30" required)
+          span(ng-show="registerForm.registerConfirm.$dirty && registerForm.registerConfirm.$error.required") Required!
+          span(ng-show="registerForm.registerConfirm.$dirty && registerForm.registerConfirm.$error.match") Passwords do not match!
         li
-          input(type="submit" class="button" value="Register" ng-disabled="form.$invalid" ng-click="form.signup(user)")
-          a(href="#/login") Login here!
+          input(type="submit" class="button" value="Register" ng-disabled="registerForm.$invalid" ng-click="form.signup(user)")
+          a(href="#/login") Login
+          span(ng-show="form.errorStatus === 403") Form details incorrect!
+    div.six.columns
+      h2 About App
+      p Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt vitae nemo, ipsa, repellendus consequatur ratione molestias beatae a officiis quisquam libero hic dolor cum eius? Quas id porro, officia ex.  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta unde, similique assumenda voluptates cumque tempora in repellendus a molestiae laudantium, odit animi mollitia excepturi ut fugiat aut libero praesentium adipisci.

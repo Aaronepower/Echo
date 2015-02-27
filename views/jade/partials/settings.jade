@@ -1,15 +1,20 @@
 div.container
   div.row
-    form.six.columns(ng-controller="FormController as form" ng-init="form.settings()")
+    form.six.columns(ng-controller="FormController as form" ng-init="form.settings()" name="settingsForm")
       h2 Account Settings
       ul
         li
           input.u-full-width(name="settingsEmail" type="email" placeholder="Email" ng-model="user.email" required autofocus)
+          span(ng-show="settingsForm.settingsEmail.$dirty && settingsForm.settingsEmail.$error.required") Required!
+          span(ng-show="settingsForm.settingsEmail.$dirty && settingsForm.settingsEmail.$error.email") Not a vaild email!
         li
-          input.u-full-width(name="registerUsername" type="text" placeholder="Username" ng-model="user.username" ng-minlength="5" required)
+          input.u-full-width(name="settingsUsername" type="text" placeholder="Username" ng-model="user.username" ng-minlength="5" ng-maxlength="12" required)
+          span(ng-show="settingsForm.settingsUsername.$dirty && settingsForm.settingsUsername.$error.required") Required!
+          span(ng-show="settingsForm.settingsUsername.$dirty && settingsForm.settingsUsername.$error.minlength") Password too short!
+          span(ng-show="settingsForm.settingsUsername.$dirty && settingsForm.settingsUsername.$error.maxlength") Password too long!
         li
-          input.u-full-width(name="registerPassword" type="password" placeholder="Password" ng-model="user.password" ng-minlength="5" ng-maxlength="30" required)
+          input.u-full-width(name="settingsPassword" type="password" placeholder="Password" ng-model="user.password" ng-minlength="5" ng-maxlength="30" required)
         li
-          input.u-full-width(name="registerConfirm" type="password" placeholder="Confirm Password" ng-model="user.confirm" ng-minlength="5" ng-maxlength="30" required)
+          input.u-full-width(name="settingsConfirm" type="password" placeholder="Confirm Password" ng-model="user.confirm" ng-minlength="5" ng-maxlength="30" required)
         li
-          input(type="submit" class="button" value="Update" ng-click="form.update(user)")
+          input(type="submit" class="button" value="Update" ng-click="form.update(user)" ng-disabled="settingsForm.$invalid")

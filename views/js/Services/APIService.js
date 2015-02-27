@@ -1,3 +1,4 @@
+// Provides a factory object for interacting with the API.
 function APIService ($http, $resource, TokenService) {
 
   var usersRoute = '/api/users/'

@@ -41,6 +41,7 @@ function CallService (UserService) {
 
     webrtc.on('readyToCall', function () {
       webrtc.joinRoom(ID)
+      document.getElementById('homeButton').src = 'img/endCall.png' 
     })
   }
 
@@ -63,7 +64,7 @@ function CallService (UserService) {
 
     socket.on('callRejected', function (receiverID) {
       // TODO Replace in the UI
-      alert('User is busy,')
+      alert('User is busy')
     })
   }
 
@@ -77,7 +78,7 @@ function CallService (UserService) {
       startCall(UserService.getUserID())
     }
     else {
-      socket.emit('callRejected', senderID, UserService.getID())
+      socket.emit('callRejected', senderID, UserService.getUserID())
     }
   })
 

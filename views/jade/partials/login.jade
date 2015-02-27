@@ -4,20 +4,21 @@ div.container
   div.row
     div.six.columns
       h2 Login
-      form(name="form" ng-controller="FormController as form")
+      form(name="loginForm" ng-controller="FormController as form")
         ul
           li
             input.u-full-width(name="loginEmail" type="email" placeholder="Username or Email" ng-model="user.email" required novalidate autofocus)
-            span(ng-show="form.loginEmail.$dirty && form.loginEmail.$error.required") Required!
-            span(ng-show="form.loginEmail.$dirty && form.loginEmail.$error.email") Not a vaild email!
+            span(ng-show="form.errorStatus === 404") User not found!
+            span(ng-show="loginForm.loginEmail.$dirty && loginForm.loginEmail.$error.required") Required!
+            span(ng-show="loginForm.loginEmail.$dirty && loginForm.loginEmail.$error.email") Not a vaild email!
           li
             input.u-full-width(name="loginPassword" type="password" placeholder="Password" ng-model="user.password" ng-minlength="5" ng-maxlength="30" novalidate required)
-            span(ng-show="form.loginPassword.$dirty && form.loginPassword.$error.required") Required!
-            span(ng-show="form.loginPassword.$dirty && form.loginPassword.$error.minlength") Password too short!
-            span(ng-show="form.loginPassword.$dirty && form.loginPassword.$error.maxlength") Password too long!
+            span(ng-show="loginForm.loginPassword.$dirty && loginForm.loginPassword.$error.required") Required!
+            span(ng-show="loginForm.loginPassword.$dirty && loginForm.loginPassword.$error.minlength") Password too short!
+            span(ng-show="loginForm.loginPassword.$dirty && loginForm.loginPassword.$error.maxlength") Password too long!
           li
-            input(type="submit" class="button" ng-disabled="form.$invalid" ng-click="form.submit(user)" value="Login")
+            input(type="submit" class="button" ng-disabled="loginForm.$invalid" ng-click="form.submit(user)" value="Login")
             a(href="#/register") Register here!
     div.six.columns
-      h2 About App
-      p Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt vitae nemo, ipsa, repellendus consequatur ratione molestias beatae a officiis quisquam libero hic dolor cum eius? Quas id porro, officia ex.  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta unde, similique assumenda voluptates cumque tempora in repellendus a molestiae laudantium, odit animi mollitia excepturi ut fugiat aut libero praesentium adipisci.
+      h2 About Echo
+      p Echo is a web based calling service. The entire site uses javascript to handle the front end and the server side. The site implements the M.E.A.N stack (MongoDB, Express, Angularjs and Nodejs) to increase the speed and require the user to only have javascript running on their web browser. The new WebRTC library makes the app possible with only javascript.  

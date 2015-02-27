@@ -119,7 +119,7 @@ router.post('/', function (req, res) {
       res.send(err)
 
     if (users.length) {
-      res.status(406).end()
+      res.status(409).end()
     }
     else {
       var user = new User()

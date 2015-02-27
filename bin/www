@@ -38,7 +38,7 @@ io.on('connection', function (socket) {
 
   socket.on('disconnect', function () {
     console.log('User: ', room, 'disconnected')
-    if (friends.length > 0) {
+    if (friends && friends.length > 0) {
       friends.forEach(function (friend) {
         if (!roomIsEmpty(friend)) {
           socket.broadcast.to(friend._id).emit('friendLogoff', room)
