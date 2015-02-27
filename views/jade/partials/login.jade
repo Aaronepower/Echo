@@ -4,14 +4,14 @@ div.container
   div.row
     div.six.columns
       h2 Login
-      form(ng-controller="FormController as form")
+      form(name="form" ng-controller="FormController as form")
         ul
           li
-            input.u-full-width(name="loginEmail" type="email" placeholder="Username or Email" ng-model="user.email" value = "" required autofocus)
+            input.u-full-width(name="loginEmail" type="email" placeholder="Username or Email" ng-model="user.email" required novalidate autofocus)
             span(ng-show="form.loginEmail.$dirty && form.loginEmail.$error.required") Required!
             span(ng-show="form.loginEmail.$dirty && form.loginEmail.$error.email") Not a vaild email!
           li
-            input.u-full-width(name="loginPassword" type="password" placeholder="Password" ng-model="user.password" ng-minlenght="5" ng-maxlength="30" value="" required)
+            input.u-full-width(name="loginPassword" type="password" placeholder="Password" ng-model="user.password" ng-minlength="5" ng-maxlength="30" novalidate required)
             span(ng-show="form.loginPassword.$dirty && form.loginPassword.$error.required") Required!
             span(ng-show="form.loginPassword.$dirty && form.loginPassword.$error.minlength") Password too short!
             span(ng-show="form.loginPassword.$dirty && form.loginPassword.$error.maxlength") Password too long!
