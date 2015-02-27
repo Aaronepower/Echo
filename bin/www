@@ -17,7 +17,7 @@ io.on('connection', function (socket) {
   var room
   , friends
   function roomIsEmpty(roomID) {
-    return io.sockets.clients(roomID).length < 1
+    return io.sockets.adapter.rooms[roomID] < 1
   }
   socket.on('logged-in', function (userID, friendsArray) {
     room = userID
@@ -37,7 +37,7 @@ io.on('connection', function (socket) {
   })
 
   socket.on('disconnect', function () {
-    console.log('User: ', userID, 'disconnected')
+    console.log('User: ', room, 'disconnected')
     if (friends.length > 0) {
       friends.forEach(function (friend) {
         if (!roomIsEmpty(friend)) {

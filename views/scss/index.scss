@@ -33,8 +33,11 @@ video {
 	margin-top: 20px;
 }
 
-.icons {
-	fill: #fff;
+.logo {
+	width: 250px;
+	height: 250px;
+	margin-left: 35%;
+	margin-top: 20px;
 }
 
 .login {
@@ -71,6 +74,14 @@ video {
 	height: 6vh;
 }
 
+.homeButton {
+	width: 75px;
+	height: 75px;
+	margin-top: 15px;
+	margin-left: 45%;
+	cursor: pointer;
+}
+
 #navbar {
 	float: right;
 	display: inline;
@@ -79,8 +90,13 @@ video {
 
 #navbar li {
 	display: inline;
-	margin: 10px;
 	cursor: pointer;
+}
+
+#navbar img {
+	width: 35px;
+	height: 35px;
+	margin-left: 5px;
 }
 
 .searchBar {

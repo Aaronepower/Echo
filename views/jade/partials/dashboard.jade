@@ -3,35 +3,36 @@ div.row(ng-controller="DashboardController as dash")
     ul
       li 
         input.u-full-width.searchBar(placeholder="Search" type="text" ng-model="dash.search.username")
-      li( ng-repeat="friend in dash.friends track by friend._id | filter: dash.search"
-          ng-click="dash.selectedFriend(friend)"
+      li( ng-repeat="friend in dash.friends track by friend._id | filter: dash.search.username"
+          ng-click="dash.selectedFriend(friend); dash.showUserDetails=true"
         )
         img(ng-src="{{friend.avatar ? '/img/'+friend.avatar: '/img/profile.png'}}")
         p {{friend.username}}
   div.ten.columns.mainBody
     header.u-full-width.navbar
+      img.homeButton(ng-src="/img/logo.png" ng-click="dash.showUserDetails=false")
       ul#navbar
         li
           img(ng-src="/img/add.svg" ng-click="dash.showAddbar=true" ng-hide="dash.showAddbar" alt="Add Friend")
-          input(type="text" ng-show="dash.showAddbar" ng-model="queries.addQuery")
-          img(ng-src="/img/correct.svg" ng-show="dash.showAddbar" ng-click="dash.addFriend(queries.addQuery); dash.showAddbar=false" alt="Add")
-          img(ng-src="/img/delete.svg" ng-show="dash.showAddbar" ng-click="dash.showAddbar=false" alt="Cancel")
+          input.addUser(type="text" placeholder="friends email" ng-show="dash.showAddbar" ng-model="queries.addQuery")
+          img.addUser(ng-src="/img/correct.svg" ng-show="dash.showAddbar" ng-click="dash.addFriend(queries.addQuery); dash.showAddbar=false" alt="Add")
+          img.addUser(ng-src="/img/delete.svg" ng-show="dash.showAddbar" ng-click="dash.showAddbar=false" alt="Cancel")
         li 
           img(ng-src="/img/settings.svg" ng-click="dash.settings()" alt="Settings")
         li
           img(ng-src="/img/signout.svg" alt="Signout")
     div.row.u-full-width.topRow
-      img#avatar(ng-src="{{dash.selected.avatar ? '/img/'+dash.selected.avatar: '/img/profile.png'}}")
+      img#avatar(ng-src="{{dash.selected.avatar ? '/img/'+dash.selected.avatar: '/img/profile.png'}}" ng-show="dash.showUserDetails")
       ul.friendDetails
         li
-          h1 {{dash.selected.username}}
+          h1(ng-show="dash.showUserDetails") {{dash.selected.username}}
         li
-          button(ng-click="dash.call()") Call
+          button(ng-click="dash.call()" ng-show="dash.showUserDetails") Call
         li
-          button(ng-click="dash.removeFriend()") Remove
+          button(ng-click="dash.removeFriend()" ng-show="dash.showUserDetails") Remove
         li
-          button(ng-click="dash.stop()") End Call
+          button(ng-click="dash.stop(); dash.showVideo=true" ng-show="dash.showUserDetails") End Call
     div.row.u-full-width.bottomRow
       div.six.columns
-        video.u-full-width#local(height="400")
+        video.u-full-width#local(ng-hide="dash.showVideo")
       div.six.columns#remotes
