@@ -21,3 +21,21 @@ In project root directory.
 ## Build
 
 Run command **gulp**
+
+## Gulp Options
+
+Add options as shown:
+
+"_gulp --debug=Echo_"
+
++ **--debug=Echo**
+
+  _Provides detailed API request and response information_ 
+  
++ **--serverPath=true**
+  
+  _Lints Server code over client code_
+
++ **--dbPath=**_your path here_
+  
+  If your mongod.exe is located somewhere other than the default (_C:/Program Files/MongoDB 2.6 Standard/bin/mongod.exe_)
