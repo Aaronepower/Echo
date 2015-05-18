@@ -23,3 +23,5 @@
 
 # Documentation
 /docs/* linguist-documentation=true
+
+/docs/vendor/* linguist-vendor=true
