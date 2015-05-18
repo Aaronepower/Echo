@@ -22,4 +22,4 @@
 *.RTF	 diff=astextplain
 
 # Documentation
-/docs/* linguist-documentation=false
+/docs/* linguist-documentation=true
